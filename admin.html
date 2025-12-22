@@ -496,7 +496,7 @@
 
                 const waNumber = data.admin_support_whatsapp.replace(/[^0-9]/g, '');
                 const userEmail = email ? `(${email})` : '(Unknown)';
-                const message = `Hello Super Admin, I am a Sub Admin ${userEmail} and I have forgotten my password. Please help me reset it.`;
+                const message = `Super Admin, මම Sub Admin කෙනෙක් (${userEmail}). මට මගේ Password එක අමතක වුනා. කරුණාකර එය Reset කරදෙන්න.`;
                 
                 // Open WhatsApp
                 window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
@@ -999,4 +999,5 @@
 
     </script>
 </body>
+
 </html>
