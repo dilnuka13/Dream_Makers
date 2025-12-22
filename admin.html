@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Makers - Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="https://dilnuka13.github.io/Dream_Makers/logo.png">
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sinhala: ['"Noto Sans Sinhala"', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    colors: { 
+                        primary: '#1e3a8a', 
+                        secondary: '#1e293b',
+                        dark: { bg: '#0f172a', card: '#1e293b', text: '#f1f5f9' }
+                    },
+                    animation: {
+                        'fade-up': 'fadeInUp 0.8s ease-out forwards',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'line-grow': 'lineGrow 1s ease-in-out 0.5s forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        lineGrow: {
+                            '0%': { width: '0' },
+                            '100%': { width: '6rem' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <!-- Supabase JS -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <style>
+        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; }
+        
+        /* Modern Scrollbar */
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #334155; }
+
+        /* Glass Effects & Gradients */
+        .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .dark .glass-effect { background: rgba(30, 41, 59, 0.9); border-color: rgba(255,255,255,0.05); }
+        
+        .gradient-primary { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); }
+        .dark .gradient-primary { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }
+        
+        .sidebar-link.active { background: linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%); color: #1e3a8a; border-right: 4px solid #1e3a8a; }
+        .dark .sidebar-link.active { background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); color: #60a5fa; border-right: 4px solid #60a5fa; }
+        
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid currentColor; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 h-screen overflow-hidden">
+
+    <!-- PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="text-center p-5">
+            <h1 class="text-4xl md:text-6xl font-bold text-blue-900 dark:text-white tracking-tight animate-fade-up">Dream Makers</h1>
+            <p class="text-lg md:text-xl text-slate-500 dark:text-slate-400 mt-2 font-light tracking-widest uppercase animate-fade-up" style="animation-delay: 0.3s">Admin Portal</p>
+            <div class="h-1 bg-blue-600 dark:bg-blue-400 mt-6 mx-auto rounded-full animate-line-grow"></div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 hidden">
+        <div class="glass-effect p-8 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden border border-white/50 dark:border-white/10 animate-fade-up">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl gradient-primary flex items-center justify-center shadow-lg">
+                    <i class="fas fa-user-shield text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-blue-900 dark:text-white">Admin Login</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Dream Makers System</p>
+            </div>
+
+            <form id="login-form" class="space-y-4">
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="email" id="login-email" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Email" required>
+                </div>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="password" id="login-password" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="Password" required>
+                </div>
+                
+                <!-- Forgot Password Link -->
+                <div class="text-right">
+                    <a href="#" onclick="forgotPassword()" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="w-full gradient-primary hover:opacity-90 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-2">
+                    <span>Login</span> <i class="fas fa-sign-in-alt"></i>
+                </button>
+            </form>
+            
+            <p id="login-error" class="text-red-500 text-xs mt-4 text-center font-bold hidden bg-red-50 dark:bg-red-900/20 p-3 rounded-lg"></p>
+
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200 dark:border-slate-700"></div></div>
+                <div class="relative flex justify-center text-sm"><span class="px-4 bg-white/0 text-slate-400 font-medium bg-inherit">OR</span></div>
+            </div>
+            
+            <button onclick="googleLogin()" class="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 px-4 rounded-xl transition-all duration-300 shadow-sm">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5"> <span>Super Admin Login</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="flex h-screen hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-xl transition-colors duration-300">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow">
+                        <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-8 h-8 object-contain">
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 dark:text-white text-lg">Dream Makers</h2>
+                        <span class="text-[10px] uppercase tracking-wider text-white font-bold bg-blue-600 px-2 py-0.5 rounded-full shadow-sm" id="admin-role-badge">Loading...</span>
+                    </div>
+                </div>
+                <p id="admin-name-display" class="text-xs text-slate-500 dark:text-slate-400 mt-3 font-medium flex items-center gap-2">
+                    <i class="fas fa-user-circle text-blue-500"></i> <span id="admin-name-text">...</span>
+                </p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto py-4 space-y-1 scrollbar-thin">
+                <button onclick="showSection('dashboard')" class="sidebar-link active w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-th-large w-5"></i> Dashboard</button>
+                
+                <p class="px-6 mt-6 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="fas fa-cogs mr-1"></i> Management</p>
+                <button onclick="showSection('members')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-users w-5 text-green-500"></i> Members <span id="pending-count-badge" class="hidden ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></button>
+                <button onclick="showSection('events')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-calendar-alt w-5 text-purple-500"></i> Events</button>
+                <button onclick="showSection('slideshow')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-images w-5 text-yellow-500"></i> Slideshow</button>
+                <button onclick="showSection('downloads')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-download w-5 text-orange-500"></i> Downloads</button>
+                <button onclick="showSection('links')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-link w-5 text-cyan-500"></i> Quick Links</button>
+                <button onclick="showSection('messages')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-comments w-5 text-pink-500"></i> Messages <span id="msg-badge" class="hidden ml-auto bg-pink-500 w-2 h-2 rounded-full"></span></button>
+
+                <!-- Super Admin Only -->
+                <div id="nav-super-admin" class="hidden">
+                    <p class="px-6 mt-6 mb-2 text-[10px] font-bold text-purple-400 uppercase tracking-widest"><i class="fas fa-star mr-1"></i> Super Admin</p>
+                    <button onclick="showSection('officers')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-user-tie w-5 text-indigo-500"></i> Officers</button>
+                    <button onclick="showSection('sports')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-running w-5 text-emerald-500"></i> Sports</button>
+                    <button onclick="showSection('settings')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-cog w-5 text-amber-500"></i> Settings</button>
+                    <button onclick="showSection('manage-admins')" class="sidebar-link w-full text-left px-6 py-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-3"><i class="fas fa-user-shield w-5 text-purple-500"></i> Manage Admins</button>
+                </div>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-2 mb-3 bg-white dark:bg-slate-800 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition shadow-sm border border-slate-200 dark:border-slate-700">
+                    <span class="flex items-center gap-2"><i class="fas fa-moon dark:hidden text-slate-400"></i><i class="fas fa-sun hidden dark:inline text-yellow-400"></i> <span>Theme</span></span>
+                </button>
+                <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 py-2.5 rounded-xl text-sm font-bold transition-all"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950 p-6 relative scrollbar-thin">
+            
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="space-y-6 animate-fade-up">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Dashboard Overview</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Welcome back, <span id="dashboard-admin-name" class="font-bold text-blue-600 dark:text-blue-400"></span>!</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                         <button onclick="refreshDashboard()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition"><i class="fas fa-sync-alt mr-1"></i> Refresh</button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 card-hover">
+                        <div class="flex justify-between"><div><p class="text-xs font-bold text-slate-400 uppercase">Total Members</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2" id="stat-total-members">0</h3></div><div class="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center"><i class="fas fa-users text-white"></i></div></div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 card-hover cursor-pointer border-l-4 border-l-orange-500" onclick="showSection('members')">
+                        <div class="flex justify-between"><div><p class="text-xs font-bold text-orange-500 uppercase">Pending Approval</p><h3 class="text-3xl font-bold text-orange-600 mt-2" id="stat-pending-members">0</h3></div><div class="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center"><i class="fas fa-user-clock text-orange-500"></i></div></div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 card-hover">
+                        <div class="flex justify-between"><div><p class="text-xs font-bold text-slate-400 uppercase">Active Events</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2" id="stat-events">0</h3></div><div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center"><i class="fas fa-calendar-check text-purple-500"></i></div></div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 card-hover">
+                        <div class="flex justify-between"><div><p class="text-xs font-bold text-slate-400 uppercase">Total Downloads</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2" id="stat-downloads">0</h3></div><div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center"><i class="fas fa-download text-cyan-500"></i></div></div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-6">Member Growth (This Year)</h3>
+                        <div class="h-64"><canvas id="memberGrowthChart"></canvas></div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-6">Event Types Distribution</h3>
+                        <div class="h-64"><canvas id="eventDistributionChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Members Section -->
+            <section id="section-members" class="hidden space-y-6 animate-slide-in">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Member Management</h1>
+                    <button onclick="openModal('member-add-modal')" class="gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg transition flex items-center gap-2"><i class="fas fa-plus"></i> Add Member</button>
+                </div>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+                        <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 uppercase font-bold text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Actions</th></tr></thead>
+                        <tbody id="members-table-body" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Events Section -->
+            <section id="section-events" class="hidden space-y-6 animate-slide-in">
+                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-slate-800 dark:text-white">Events</h1><button onclick="openModal('event-modal')" class="gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Event</button></div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="events-grid"></div>
+            </section>
+
+            <!-- Slideshow Section -->
+            <section id="section-slideshow" class="hidden space-y-6 animate-slide-in">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Home Slideshow</h1>
+                    <button onclick="openModal('slide-modal')" class="gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Image</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="slideshow-grid">
+                    <!-- Images will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Downloads Section -->
+            <section id="section-downloads" class="hidden space-y-6 animate-slide-in">
+                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-slate-800 dark:text-white">Downloads</h1><button onclick="openModal('download-modal')" class="gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add File</button></div>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6"><ul id="downloads-list" class="space-y-4"></ul></div>
+            </section>
+            
+            <!-- Quick Links Section -->
+            <section id="section-links" class="hidden space-y-6 animate-slide-in">
+                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-slate-800 dark:text-white">Quick Links</h1><button onclick="openModal('link-modal')" class="gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Link</button></div>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6"><ul id="quick-links-list" class="space-y-2"></ul></div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="section-messages" class="hidden space-y-6 animate-slide-in">
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Messages</h1>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6 space-y-4" id="messages-list"></div>
+            </section>
+
+            <!-- Super Admin Sections -->
+            <section id="section-officers" class="hidden space-y-6 animate-slide-in">
+                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-slate-800 dark:text-white">Officers</h1><button onclick="openModal('officer-modal')" class="bg-purple-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Officer</button></div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="officers-grid"></div>
+            </section>
+
+            <section id="section-sports" class="hidden space-y-6 animate-slide-in">
+                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-slate-800 dark:text-white">Sports</h1><button onclick="openModal('sport-modal')" class="bg-purple-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Team</button></div>
+                 <div class="grid grid-cols-1 gap-4" id="sports-grid"></div>
+            </section>
+
+            <section id="section-settings" class="hidden space-y-6 animate-slide-in">
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Settings</h1>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- General Settings -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-purple-800 dark:text-purple-400 mb-4">Contact Info</h3>
+                        <form id="settings-form" class="space-y-4">
+                            <input type="text" id="setting-address" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Address">
+                            <input type="text" id="setting-phone" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Phone">
+                            <input type="email" id="setting-email" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Email">
+                            
+                            <hr class="border-slate-200 dark:border-slate-700 my-2">
+                            <label class="block text-xs font-bold text-red-500 mb-1">Admin Support WhatsApp (For Password Recovery)</label>
+                            <input type="tel" id="setting-admin-wa" class="w-full bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg p-3 text-sm dark:text-white placeholder-red-300" placeholder="e.g. 9471XXXXXXX">
+                            
+                            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm font-bold">Save</button>
+                        </form>
+                    </div>
+                     <!-- Socials -->
+                     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-purple-800 dark:text-purple-400 mb-4">Social Links</h3>
+                        <form id="socials-form" class="space-y-4">
+                            <input type="url" id="social-fb" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Facebook URL">
+                            <input type="url" id="social-yt" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="YouTube URL">
+                             <input type="url" id="social-ig" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Instagram URL">
+                             <input type="url" id="social-wa" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="WhatsApp URL">
+                              <input type="url" id="social-tg" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg p-3 text-sm dark:text-white" placeholder="Telegram URL">
+                            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg text-sm font-bold">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+             <section id="section-manage-admins" class="hidden space-y-6 animate-slide-in">
+                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold text-purple-700 dark:text-purple-400">Manage Admins</h1> <button onclick="openModal('admin-modal')" class="bg-purple-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg"><i class="fas fa-plus"></i> Add Sub Admin</button></div>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+                        <thead class="bg-purple-50 dark:bg-slate-800 text-purple-900 dark:text-purple-300 uppercase font-bold text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Actions</th></tr></thead>
+                        <tbody id="admins-list" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="member-add-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto animate-slide-in">
+            <h3 class="text-xl font-bold mb-4 dark:text-white" id="member-modal-title">Add New Member</h3>
+            <form id="member-add-form" class="space-y-3">
+                <input type="hidden" id="m-id">
+                <input type="text" id="m-name" placeholder="Full Name" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                <input type="text" id="m-initials" placeholder="Name with Initials" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                <input type="text" id="m-nic" placeholder="NIC" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white">
+                <input type="date" id="m-dob" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                <textarea id="m-address" placeholder="Address" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" rows="2" required></textarea>
+                <input type="tel" id="m-phone" placeholder="Phone" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                <div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('member-add-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 gradient-primary text-white rounded-xl font-bold">Save Member</button></div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="event-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto shadow-2xl animate-slide-in">
+            <h3 class="text-xl font-bold mb-4 dark:text-white" id="event-modal-title">Manage Event</h3>
+            <form id="event-form" class="space-y-3">
+                <input type="hidden" id="event-id">
+                <input type="text" id="event-title" placeholder="Event Title" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                <textarea id="event-desc" placeholder="Description" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" rows="3"></textarea>
+                <div class="grid grid-cols-2 gap-3"><input type="date" id="event-date" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="time" id="event-time" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"></div>
+                <input type="text" id="event-location" placeholder="Location" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white">
+                <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-4 text-center"><input type="file" id="event-file" class="hidden" accept="image/*"><label for="event-file" class="cursor-pointer text-blue-600 font-bold">Choose Image</label><input type="hidden" id="event-image-url"><p id="event-file-name" class="text-xs text-green-600 mt-2 truncate"></p></div>
+                <select id="event-type" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><option value="Event">Event</option><option value="Project">Project</option><option value="Meeting">Meeting</option></select>
+                <div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('event-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 gradient-primary text-white rounded-xl font-bold">Save Event</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Slideshow Modal -->
+    <div id="slide-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in">
+            <h3 class="text-xl font-bold mb-4 dark:text-white">Add Slideshow Image</h3>
+            <form id="slide-form" class="space-y-4">
+                <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center hover:bg-slate-50 dark:hover:bg-slate-700/50 transition cursor-pointer relative">
+                    <input type="file" id="slide-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" required>
+                    <div class="space-y-2">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-blue-500"></i>
+                        <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Click to Upload</p>
+                        <p id="slide-file-name" class="text-xs text-slate-400 truncate">No file selected</p>
+                    </div>
+                </div>
+                <input type="hidden" id="slide-image-url">
+                <input type="number" id="slide-order" placeholder="Display Order (e.g., 1)" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required>
+                
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" onclick="closeModal('slide-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button>
+                    <button type="submit" class="px-6 py-2 gradient-primary text-white rounded-xl font-bold">Add to Slide</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="download-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm"><div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in"><h3 class="text-xl font-bold mb-4 dark:text-white">File</h3><form id="download-form" class="space-y-3"><input type="hidden" id="dl-id"><input type="text" id="dl-name" placeholder="Name" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="text" id="dl-cat" placeholder="Category" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><input type="url" id="dl-url" placeholder="URL" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('download-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 gradient-primary text-white rounded-xl font-bold">Save</button></div></form></div></div>
+    
+    <div id="link-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm"><div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in"><h3 class="text-xl font-bold mb-4 dark:text-white">Quick Link</h3><form id="link-form" class="space-y-3"><input type="hidden" id="link-id"><input type="text" id="link-title" placeholder="Title" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="url" id="link-url" placeholder="URL" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="text" id="link-desc" placeholder="Desc" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><input type="number" id="link-order" value="1" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('link-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 gradient-primary text-white rounded-xl font-bold">Save</button></div></form></div></div>
+    
+    <div id="admin-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm"><div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in"><h3 class="text-xl font-bold mb-4 dark:text-white" id="admin-modal-title">Sub Admin</h3><form id="admin-form" class="space-y-3"><input type="hidden" id="admin-id"><input type="text" id="admin-name" placeholder="Name" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="email" id="admin-email" placeholder="Email" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="text" id="admin-password" placeholder="Password" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="tel" id="admin-contact" placeholder="Contact" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><select id="admin-status" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><option value="active">Active</option><option value="inactive">Inactive</option></select><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('admin-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-xl font-bold">Save Admin</button></div></form></div></div>
+    
+    <div id="officer-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm"><div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in"><h3 class="text-xl font-bold mb-4 dark:text-white">Officer</h3><form id="officer-form" class="space-y-3"><input type="hidden" id="officer-id"><input type="text" id="officer-name" placeholder="Name" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="text" id="officer-position" placeholder="Position" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="tel" id="officer-phone" placeholder="Phone" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><input type="date" id="officer-date" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-4 text-center"><input type="file" id="officer-file" class="hidden" accept="image/*"><label for="officer-file" class="cursor-pointer text-blue-600 font-bold">Choose Photo</label><input type="hidden" id="officer-image-url"><p id="officer-file-name" class="text-xs text-green-600 mt-2 truncate"></p></div><input type="number" id="officer-order" placeholder="Order" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('officer-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-xl font-bold">Save</button></div></form></div></div>
+    
+    <div id="sport-modal" class="fixed inset-0 bg-slate-900/80 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm"><div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-slide-in"><h3 class="text-xl font-bold mb-4 dark:text-white">Sport Team</h3><form id="sport-form" class="space-y-3"><input type="hidden" id="sport-id"><input type="text" id="sport-name" placeholder="Name" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white" required><input type="text" id="sport-captain" placeholder="Captain" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"><textarea id="sport-desc" placeholder="Desc" class="w-full border dark:border-slate-600 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-white"></textarea><div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-4 text-center"><input type="file" id="sport-file" class="hidden" accept="image/*"><label for="sport-file" class="cursor-pointer text-blue-600 font-bold">Choose Photo</label><input type="hidden" id="sport-image-url"><p id="sport-file-name" class="text-xs text-green-600 mt-2 truncate"></p></div><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('sport-modal')" class="px-4 py-2 text-slate-500 font-bold">Cancel</button><button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-xl font-bold">Save</button></div></form></div></div>
+
+    <script>
+        // --- THEME LOGIC ---
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').classList.add('opacity-0', 'pointer-events-none'); document.body.classList.remove('overflow-hidden'); }, 2000); });
+
+        // --- SUPABASE CONFIG ---
+        const supabaseUrl = 'https://yzlgnavevrvikaolxorg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bGduYXZldnJ2aWthb2x4b3JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzNjQyODEsImV4cCI6MjA4MTk0MDI4MX0.17BpZteoYnIYZsCs1f90VGMYnmYW6AHeXO4-1yYB7Ts';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- FIREBASE CONFIG (SUPER ADMIN) ---
+        const firebaseConfig = { apiKey: "AIzaSyD6yXDHsOaqVplfhsXZV8nWvMuioDulwYg", authDomain: "edu-login-4d05f.firebaseapp.com", projectId: "edu-login-4d05f", storageBucket: "edu-login-4d05f.firebasestorage.app", messagingSenderId: "197092856272", appId: "1:197092856272:web:a00b0169e46e7d5acca9d5" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        const SUPER_ADMIN_UID = "73KustyeOpUsTGTqQBVeQP3LUBF2";
+
+        let currentUser = null;
+        let charts = {};
+
+        // --- AUTH LOGIC ---
+        const storedUser = localStorage.getItem('dm_admin_user');
+        if (storedUser) {
+            currentUser = JSON.parse(storedUser);
+            initAdminPanel();
+        } else {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const errorMsg = document.getElementById('login-error');
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            errorMsg.classList.add('hidden');
+            btn.innerHTML = '<div class="spinner"></div>';
+
+            try {
+                const { data, error } = await supabaseClient.from('admins').select('*').eq('email', email).eq('password', pass).single();
+                if (error || !data) throw new Error("Invalid Credentials");
+                if (data.status !== 'active') throw new Error("Account Deactivated");
+
+                await supabaseClient.from('admins').update({ last_login: new Date().toISOString() }).eq('id', data.id);
+                currentUser = data;
+                localStorage.setItem('dm_admin_user', JSON.stringify(data));
+                document.getElementById('login-screen').classList.add('hidden');
+                initAdminPanel();
+            } catch (err) {
+                errorMsg.innerText = err.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = originalText;
+            }
+        });
+
+        function googleLogin() {
+             auth.signInWithPopup(googleProvider).then((result) => {
+                if (result.user.uid === SUPER_ADMIN_UID) {
+                    currentUser = { id: result.user.uid, name: result.user.displayName, email: result.user.email, role: 'super_admin', status: 'active' };
+                    localStorage.setItem('dm_admin_user', JSON.stringify(currentUser));
+                    document.getElementById('login-screen').classList.add('hidden');
+                    initAdminPanel();
+                } else { alert("Access Denied"); auth.signOut(); }
+            }).catch(e => alert(e.message));
+        }
+
+        function logout() { localStorage.removeItem('dm_admin_user'); auth.signOut(); window.location.reload(); }
+
+        // --- FORGOT PASSWORD LOGIC ---
+        async function forgotPassword() {
+            const email = document.getElementById('login-email').value;
+            const btn = document.querySelector('a[onclick="forgotPassword()"]');
+            const originalText = btn.innerText;
+            btn.innerText = "Checking...";
+
+            try {
+                // Fetch the Super Admin WhatsApp number from settings
+                const { data, error } = await supabaseClient.from('site_settings').select('admin_support_whatsapp').limit(1).maybeSingle();
+                
+                if (error || !data || !data.admin_support_whatsapp) {
+                    alert("Support contact is not configured. Please contact the administrator directly.");
+                    return;
+                }
+
+                const waNumber = data.admin_support_whatsapp.replace(/[^0-9]/g, '');
+                const userEmail = email ? `(${email})` : '(Unknown)';
+                const message = `Hello Super Admin, I am a Sub Admin ${userEmail} and I have forgotten my password. Please help me reset it.`;
+                
+                // Open WhatsApp
+                window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+
+            } catch (e) {
+                alert("Error connecting to support.");
+            } finally {
+                btn.innerText = originalText;
+            }
+        }
+
+        function initAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('hidden');
+            document.getElementById('admin-role-badge').innerText = currentUser.role === 'super_admin' ? 'Super Admin' : 'Sub Admin';
+            document.getElementById('admin-name-display').innerHTML = `<i class="fas fa-user-circle text-blue-500"></i> ${currentUser.name}`;
+            document.getElementById('dashboard-admin-name').innerText = currentUser.name.split(' ')[0];
+            if (currentUser.role === 'super_admin') document.getElementById('nav-super-admin').classList.remove('hidden');
+            loadDashboard();
+        }
+
+        // --- NAVIGATION ---
+        function showSection(id) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            document.getElementById(`section-${id}`).classList.remove('hidden');
+            document.querySelector(`button[onclick="showSection('${id}')"]`).classList.add('active');
+            
+            if(id === 'dashboard') loadDashboard();
+            if(id === 'members') loadMembers();
+            if(id === 'events') loadEvents();
+            if(id === 'slideshow') loadSlideshow(); // ADDED: Load Slideshow
+            if(id === 'downloads') loadDownloads();
+            if(id === 'links') loadQuickLinks();
+            if(id === 'messages') loadMessages();
+            if(id === 'officers') loadOfficers();
+            if(id === 'sports') loadSports();
+            if(id === 'settings') loadSettings();
+            if(id === 'manage-admins') loadAdmins();
+        }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { 
+            document.getElementById(id).classList.add('hidden');
+            const form = document.querySelector(`#${id} form`);
+            if(form) {
+                form.reset();
+                const hiddenId = form.querySelector('input[type="hidden"]');
+                if(hiddenId) hiddenId.value = '';
+                // Clear filename labels
+                const fileLabel = form.querySelector('[id$="-file-name"]');
+                if(fileLabel) fileLabel.innerText = 'No file selected';
+            }
+        }
+
+        // --- DASHBOARD & ANALYTICS ---
+        async function loadDashboard() {
+            const { count: m } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            const { count: p } = await supabaseClient.from('members').select('*', { count: 'exact', head: true }).eq('status', 'inactive');
+            const { count: e } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
+            const { count: d } = await supabaseClient.from('downloads').select('*', { count: 'exact', head: true });
+            
+            document.getElementById('stat-total-members').innerText = m || 0;
+            document.getElementById('stat-pending-members').innerText = p || 0;
+            document.getElementById('stat-events').innerText = e || 0;
+            document.getElementById('stat-downloads').innerText = d || 0;
+            
+            const badge = document.getElementById('pending-count-badge');
+            if(p > 0) { badge.innerText = p; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
+
+            initCharts();
+        }
+        
+        function refreshDashboard() { 
+            const btn = document.querySelector('button[onclick="refreshDashboard()"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            loadDashboard().then(() => btn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Refresh');
+        }
+
+        async function initCharts() {
+            const { data: members } = await supabaseClient.from('members').select('created_at').order('created_at', {ascending: true});
+            const months = {};
+            members.forEach(m => {
+                const date = new Date(m.created_at || new Date());
+                const key = date.toLocaleString('default', { month: 'short' });
+                months[key] = (months[key] || 0) + 1;
+            });
+
+            const memberCtx = document.getElementById('memberGrowthChart').getContext('2d');
+            if(charts.member) charts.member.destroy();
+            charts.member = new Chart(memberCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(months),
+                    datasets: [{ label: 'New Members', data: Object.values(months), borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            const { data: events } = await supabaseClient.from('events').select('type');
+            const types = {};
+            events.forEach(e => types[e.type || 'Event'] = (types[e.type || 'Event'] || 0) + 1);
+            
+            const eventCtx = document.getElementById('eventDistributionChart').getContext('2d');
+            if(charts.event) charts.event.destroy();
+            charts.event = new Chart(eventCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(types),
+                    datasets: [{ data: Object.values(types), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: document.documentElement.classList.contains('dark') ? '#fff' : '#666' } } } }
+            });
+        }
+
+        // --- GENERIC EDIT HELPERS ---
+        async function fetchAndPopulate(table, id, formId, mapping) {
+            const { data, error } = await supabaseClient.from(table).select('*').eq('id', id).single();
+            if(error) { alert('Error fetching data'); return; }
+            
+            // Set hidden ID
+            const hiddenInput = document.querySelector(`#${formId} input[type="hidden"]`);
+            if(hiddenInput) hiddenInput.value = data.id;
+
+            // Map fields
+            for (const [key, elementId] of Object.entries(mapping)) {
+                const el = document.getElementById(elementId);
+                if(el) el.value = data[key] || '';
+            }
+            return data;
+        }
+
+        // --- MEMBER MANAGEMENT ---
+        async function loadMembers() {
+            const { data } = await supabaseClient.from('members').select('*').order('id', { ascending: false });
+            const tbody = document.getElementById('members-table-body');
+            tbody.innerHTML = '';
+            if(!data) return;
+            data.forEach(m => {
+                const isPending = m.status === 'inactive';
+                tbody.innerHTML += `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 border-b border-slate-100 dark:border-slate-800 transition ${isPending ? 'bg-orange-50/50 dark:bg-orange-900/10' : ''}">
+                    <td class="px-6 py-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400"><i class="fas fa-user"></i></div><div><div class="font-bold text-slate-800 dark:text-white">${m.full_name}</div><div class="text-xs text-slate-500">${m.name_with_initials}</div></div></div></td>
+                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">${m.phone}<br><span class="text-xs opacity-70">${m.email || ''}</span></td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${isPending ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400' : 'bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-400'}">${isPending ? 'Pending' : 'Active'}</span></td>
+                    <td class="px-6 py-4 text-right">
+                        ${isPending ? `<button onclick="approveMember(${m.id})" class="text-green-600 hover:text-green-500 mr-3" title="Approve"><i class="fas fa-check"></i></button>` : ''}
+                        <button onclick="editMember(${m.id})" class="text-blue-500 hover:text-blue-400 mr-3" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem('members', ${m.id})" class="text-red-500 hover:text-red-400" title="Delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+        async function approveMember(id) { if(confirm("Approve Member?")) await supabaseClient.from('members').update({status:'active'}).eq('id',id); loadMembers(); loadDashboard(); }
+        
+        async function editMember(id) {
+            await fetchAndPopulate('members', id, 'member-add-form', {
+                full_name: 'm-name', name_with_initials: 'm-initials', nic: 'm-nic', dob: 'm-dob',
+                address: 'm-address', phone: 'm-phone'
+            });
+            document.getElementById('member-modal-title').innerText = "Edit Member";
+            openModal('member-add-modal');
+        }
+
+        document.getElementById('member-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('m-id').value;
+            const payload = {
+                full_name: document.getElementById('m-name').value, name_with_initials: document.getElementById('m-initials').value,
+                nic: document.getElementById('m-nic').value, dob: document.getElementById('m-dob').value, address: document.getElementById('m-address').value,
+                phone: document.getElementById('m-phone').value, status: 'active'
+            };
+            if(id) await supabaseClient.from('members').update(payload).eq('id', id);
+            else await supabaseClient.from('members').insert([payload]);
+            closeModal('member-add-modal'); loadMembers();
+        });
+
+        // --- EVENT MANAGEMENT ---
+        async function loadEvents() {
+             const { data } = await supabaseClient.from('events').select('*').order('event_date', { ascending: false });
+             const grid = document.getElementById('events-grid'); grid.innerHTML = '';
+             data.forEach(e => {
+                 grid.innerHTML += `
+                 <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm relative card-hover group">
+                    <div class="h-40 bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 overflow-hidden"><img src="${e.cover_image_url || 'https://via.placeholder.com/300'}" class="w-full h-full object-cover"></div>
+                    <div class="flex justify-between items-start">
+                        <div><h4 class="font-bold text-slate-800 dark:text-white">${e.title}</h4><p class="text-xs text-slate-500">${e.event_date}</p></div>
+                        <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-600 rounded-md">${e.type || 'Event'}</span>
+                    </div>
+                    <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                        <button onclick="editEvent(${e.id})" class="bg-white text-blue-500 p-2 rounded-full shadow hover:bg-blue-50"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem('events', ${e.id})" class="bg-white text-red-500 p-2 rounded-full shadow hover:bg-red-50"><i class="fas fa-trash"></i></button>
+                    </div>
+                 </div>`;
+             });
+        }
+        async function editEvent(id) {
+            const data = await fetchAndPopulate('events', id, 'event-form', {
+                title: 'event-title', description: 'event-desc', event_date: 'event-date', 
+                event_time: 'event-time', location: 'event-location', type: 'event-type', cover_image_url: 'event-image-url'
+            });
+            openModal('event-modal');
+        }
+        document.getElementById('event-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('event-id').value;
+            const payload = { 
+                title: document.getElementById('event-title').value, description: document.getElementById('event-desc').value, 
+                event_date: document.getElementById('event-date').value, event_time: document.getElementById('event-time').value, 
+                location: document.getElementById('event-location').value, cover_image_url: document.getElementById('event-image-url').value, 
+                type: document.getElementById('event-type').value 
+            };
+            if(id) await supabaseClient.from('events').update(payload).eq('id', id);
+            else await supabaseClient.from('events').insert([payload]);
+            closeModal('event-modal'); loadEvents();
+        });
+
+        // --- SLIDESHOW MANAGEMENT ---
+        async function loadSlideshow() {
+            const { data } = await supabaseClient.from('slideshow_images').select('*').order('display_order');
+            const grid = document.getElementById('slideshow-grid');
+            grid.innerHTML = '';
+            
+            if (data && data.length > 0) {
+                data.forEach(img => {
+                    grid.innerHTML += `
+                    <div class="bg-white dark:bg-slate-900 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm relative group">
+                        <div class="aspect-video rounded-xl overflow-hidden mb-2">
+                            <img src="${img.image_url}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-xs font-bold text-slate-500">Order: ${img.display_order}</span>
+                            <button onclick="deleteItem('slideshow_images', ${img.id})" class="text-red-500 hover:text-red-600 p-2"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                });
+            } else {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-8">No images added. Default image will be shown.</p>';
+            }
+        }
+        
+        document.getElementById('slide-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const label = document.getElementById('slide-file-name');
+                label.innerText = "Uploading... Please wait";
+                const url = await uploadImage(file);
+                if (url) {
+                    document.getElementById('slide-image-url').value = url;
+                    label.innerText = "Uploaded!";
+                    label.classList.add('text-green-500');
+                } else {
+                    label.innerText = "Upload Failed";
+                    label.classList.add('text-red-500');
+                }
+            }
+        });
+
+        document.getElementById('slide-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('slide-image-url').value;
+            if (!url) { alert("Please upload an image first."); return; }
+            
+            const payload = {
+                image_url: url,
+                display_order: document.getElementById('slide-order').value || 0
+            };
+            
+            const { error } = await supabaseClient.from('slideshow_images').insert([payload]);
+            if (error) alert("Error: " + error.message);
+            else { closeModal('slide-modal'); loadSlideshow(); }
+        });
+
+        // --- DOWNLOADS & LINKS ---
+        async function loadDownloads() {
+             const { data } = await supabaseClient.from('downloads').select('*');
+             const list = document.getElementById('downloads-list'); list.innerHTML = '';
+             data.forEach(d => list.innerHTML += `<li class="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                <div><p class="font-bold text-sm text-slate-800 dark:text-white">${d.file_name}</p><p class="text-[10px] text-slate-500">${d.category}</p></div>
+                <div class="flex gap-3">
+                    <button onclick="editDownload(${d.id})" class="text-blue-400 hover:text-blue-500"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteItem('downloads', ${d.id})" class="text-red-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </div></li>`);
+        }
+        async function editDownload(id) { await fetchAndPopulate('downloads', id, 'download-form', { file_name: 'dl-name', category: 'dl-cat', file_url: 'dl-url' }); openModal('download-modal'); }
+        document.getElementById('download-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('dl-id').value;
+            const payload = { file_name: document.getElementById('dl-name').value, category: document.getElementById('dl-cat').value, file_url: document.getElementById('dl-url').value };
+            if(id) await supabaseClient.from('downloads').update(payload).eq('id', id); else await supabaseClient.from('downloads').insert([payload]);
+            closeModal('download-modal'); loadDownloads(); 
+        });
+        
+        async function loadQuickLinks() {
+             const { data } = await supabaseClient.from('quick_links').select('*');
+             const list = document.getElementById('quick-links-list'); list.innerHTML = '';
+             data.forEach(l => list.innerHTML += `<li class="flex justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300">
+                <span>${l.title}</span>
+                <div class="flex gap-3">
+                    <button onclick="editLink(${l.id})" class="text-blue-400 hover:text-blue-500"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteItem('quick_links', ${l.id})" class="text-red-400"><i class="fas fa-trash"></i></button>
+                </div></li>`);
+        }
+        async function editLink(id) { await fetchAndPopulate('quick_links', id, 'link-form', { title: 'link-title', link_url: 'link-url', description: 'link-desc', display_order: 'link-order' }); openModal('link-modal'); }
+        document.getElementById('link-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('link-id').value;
+            const payload = { title: document.getElementById('link-title').value, link_url: document.getElementById('link-url').value, description: document.getElementById('link-desc').value, display_order: document.getElementById('link-order').value, is_active: true };
+            if(id) await supabaseClient.from('quick_links').update(payload).eq('id', id); else await supabaseClient.from('quick_links').insert([payload]);
+            closeModal('link-modal'); loadQuickLinks(); 
+        });
+
+        // --- SUPER ADMIN SECTIONS ---
+        async function loadOfficers() {
+             const { data } = await supabaseClient.from('officers').select('*').order('display_order');
+             const grid = document.getElementById('officers-grid'); grid.innerHTML = '';
+             data.forEach(o => grid.innerHTML += `<div class="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 text-center relative card-hover group">
+                <img src="${o.image_url}" class="w-20 h-20 rounded-full mx-auto mb-3 object-cover">
+                <h4 class="font-bold text-sm text-slate-800 dark:text-white">${o.name}</h4><p class="text-xs text-blue-600 font-bold">${o.position}</p>
+                <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                    <button onclick="editOfficer(${o.id})" class="text-blue-400"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteItem('officers', ${o.id})" class="text-red-400"><i class="fas fa-trash"></i></button>
+                </div></div>`);
+        }
+        async function editOfficer(id) { await fetchAndPopulate('officers', id, 'officer-form', { name: 'officer-name', position: 'officer-position', contact_no: 'officer-phone', image_url: 'officer-image-url', display_order: 'officer-order', appointed_date: 'officer-date' }); openModal('officer-modal'); }
+        document.getElementById('officer-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('officer-id').value;
+            const payload = { name: document.getElementById('officer-name').value, position: document.getElementById('officer-position').value, contact_no: document.getElementById('officer-phone').value, image_url: document.getElementById('officer-image-url').value, display_order: document.getElementById('officer-order').value, appointed_date: document.getElementById('officer-date').value };
+            if(id) await supabaseClient.from('officers').update(payload).eq('id', id); else await supabaseClient.from('officers').insert([payload]);
+            closeModal('officer-modal'); loadOfficers(); 
+        });
+
+        async function loadSports() {
+             const { data } = await supabaseClient.from('sports_teams').select('*');
+             const grid = document.getElementById('sports-grid'); grid.innerHTML = '';
+             data.forEach(s => grid.innerHTML += `<div class="flex justify-between items-center p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 card-hover">
+                <div><h4 class="font-bold text-slate-800 dark:text-white">${s.sport_name}</h4><p class="text-xs text-slate-500">Capt: ${s.captain_name}</p></div>
+                <div class="flex gap-3">
+                    <button onclick="editSport(${s.id})" class="text-blue-400"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteItem('sports_teams', ${s.id})" class="text-red-400"><i class="fas fa-trash"></i></button>
+                </div></div>`);
+        }
+        async function editSport(id) { await fetchAndPopulate('sports_teams', id, 'sport-form', { sport_name: 'sport-name', captain_name: 'sport-captain', description: 'sport-desc', team_photo_url: 'sport-image-url' }); openModal('sport-modal'); }
+        document.getElementById('sport-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('sport-id').value;
+            const payload = { sport_name: document.getElementById('sport-name').value, captain_name: document.getElementById('sport-captain').value, description: document.getElementById('sport-desc').value, team_photo_url: document.getElementById('sport-image-url').value };
+            if(id) await supabaseClient.from('sports_teams').update(payload).eq('id', id); else await supabaseClient.from('sports_teams').insert([payload]);
+            closeModal('sport-modal'); loadSports(); 
+        });
+        
+        // --- ADMIN MANAGEMENT ---
+        async function loadAdmins() {
+             const { data } = await supabaseClient.from('admins').select('*').order('id');
+             const tbody = document.getElementById('admins-list'); tbody.innerHTML = '';
+             data.forEach(a => {
+                 const isMe = currentUser.id === a.id;
+                 tbody.innerHTML += `
+                 <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td class="px-6 py-4 font-bold text-slate-800 dark:text-white">${a.name} <span class="text-[10px] text-slate-400 uppercase ml-1">${a.role}</span></td>
+                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">${a.contact_number || '-'}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold ${a.status==='active'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${a.status}</span></td>
+                    <td class="px-6 py-4 text-right">
+                        ${!isMe ? `
+                        <button onclick="toggleAdminStatus(${a.id}, '${a.status}')" class="text-orange-500 hover:text-orange-600 mr-2" title="Toggle Status"><i class="fas fa-power-off"></i></button>
+                        <button onclick="editAdmin(${a.id})" class="text-blue-500 hover:text-blue-600 mr-2" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem('admins', ${a.id})" class="text-red-500 hover:text-red-600" title="Delete"><i class="fas fa-trash"></i></button>
+                        ` : '<span class="text-xs text-slate-400">You</span>'}
+                    </td>
+                 </tr>`;
+             });
+        }
+        async function toggleAdminStatus(id, current) {
+            const newStatus = current === 'active' ? 'inactive' : 'active';
+            if(confirm(`Change status to ${newStatus}?`)) await supabaseClient.from('admins').update({status: newStatus}).eq('id', id); loadAdmins();
+        }
+        async function editAdmin(id) { await fetchAndPopulate('admins', id, 'admin-form', { name: 'admin-name', email: 'admin-email', password: 'admin-password', contact_number: 'admin-contact', status: 'admin-status' }); openModal('admin-modal'); }
+        document.getElementById('admin-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('admin-id').value;
+            const payload = { name: document.getElementById('admin-name').value, email: document.getElementById('admin-email').value, password: document.getElementById('admin-password').value, contact_number: document.getElementById('admin-contact').value, status: document.getElementById('admin-status').value, role: 'admin' };
+            if(id) await supabaseClient.from('admins').update(payload).eq('id', id); else await supabaseClient.from('admins').insert([payload]);
+            closeModal('admin-modal'); loadAdmins(); 
+        });
+
+        // --- MESSAGES ---
+        async function loadMessages() {
+            const { data } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
+            const list = document.getElementById('messages-list');
+            const badge = document.getElementById('msg-badge');
+            let unread = 0;
+            list.innerHTML = '';
+            
+            if(!data || data.length === 0) { list.innerHTML = '<p class="text-center text-slate-400">No messages</p>'; return; }
+
+            data.forEach(msg => {
+                if(!msg.is_read) unread++;
+                const replyLink = `mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}&body=Hi ${encodeURIComponent(msg.name)},`;
+
+                list.innerHTML += `
+                <div class="p-5 rounded-2xl border ${msg.is_read ? 'border-slate-100 dark:border-slate-800 bg-transparent' : 'border-blue-200 bg-blue-50 dark:bg-blue-900/20'} flex flex-col md:flex-row justify-between items-start gap-4 transition hover:shadow-md">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <h4 class="font-bold text-slate-800 dark:text-white text-lg">${msg.name}</h4>
+                            <span class="text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded-full">${new Date(msg.created_at).toLocaleDateString()}</span>
+                            ${!msg.is_read ? '<span class="text-[10px] bg-blue-500 text-white px-2 py-0.5 rounded-full font-bold">NEW</span>' : ''}
+                        </div>
+                        <p class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-1"><i class="fas fa-tag mr-1"></i> ${msg.subject || 'No Subject'}</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 bg-white/50 dark:bg-black/20 p-3 rounded-lg border border-slate-100 dark:border-slate-700/50">${msg.message}</p>
+                        <p class="text-xs text-slate-400 mt-2"><i class="fas fa-envelope mr-1"></i> ${msg.email}</p>
+                    </div>
+                    <div class="flex flex-row md:flex-col gap-2 w-full md:w-auto">
+                        <a href="${replyLink}" class="flex-1 md:flex-none text-center bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-200 px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-600 transition">
+                            <i class="fas fa-reply mr-1"></i> Reply
+                        </a>
+                        ${!msg.is_read ? `<button onclick="markRead(${msg.id})" class="flex-1 md:flex-none bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-200 transition"><i class="fas fa-check mr-1"></i> Read</button>` : ''}
+                        <button onclick="deleteItem('messages', ${msg.id})" class="flex-1 md:flex-none bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-100 transition"><i class="fas fa-trash mr-1"></i> Delete</button>
+                    </div>
+                </div>`;
+            });
+            if(unread > 0) { badge.classList.remove('hidden'); badge.innerText = unread; } else { badge.classList.add('hidden'); }
+        }
+        async function markRead(id) { await supabaseClient.from('messages').update({is_read: true}).eq('id', id); loadMessages(); }
+
+        // --- FILE UPLOAD & FORMS ---
+        async function uploadImage(file) {
+            if(!file) return null;
+            const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '-')}`;
+            const { data, error } = await supabaseClient.storage.from('images').upload(fileName, file);
+            if(error) return null;
+            const { data: { publicUrl } } = supabaseClient.storage.from('images').getPublicUrl(fileName);
+            return publicUrl;
+        }
+
+        ['event', 'officer', 'sport', 'slide'].forEach(prefix => {
+            const input = document.getElementById(`${prefix}-file`);
+            if(input) input.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if(file) {
+                    const label = document.getElementById(`${prefix}-file-name`);
+                    label.innerText = "Uploading...";
+                    const url = await uploadImage(file);
+                    document.getElementById(`${prefix}-image-url`).value = url;
+                    label.innerText = "Uploaded!";
+                }
+            });
+        });
+
+        // --- GENERIC DELETE ---
+        async function deleteItem(table, id) { 
+            if(confirm("Permanently delete this item?")) { 
+                await supabaseClient.from(table).delete().eq('id', id); 
+                loadDashboard(); 
+                const map={
+                    members:loadMembers,
+                    events:loadEvents,
+                    downloads:loadDownloads,
+                    officers:loadOfficers,
+                    sports_teams:loadSports,
+                    quick_links:loadQuickLinks,
+                    admins:loadAdmins,
+                    messages:loadMessages,
+                    slideshow_images: loadSlideshow // ADDED: Mapping for Slideshow
+                }; 
+                if(map[table]) map[table](); 
+            } 
+        }
+
+        async function loadSettings() {
+            const { data } = await supabaseClient.from('site_settings').select('*').limit(1).maybeSingle();
+            if(data) {
+                document.getElementById('setting-address').value = data.address || '';
+                document.getElementById('setting-phone').value = data.contact_number || '';
+                document.getElementById('setting-email').value = data.email || '';
+                document.getElementById('setting-admin-wa').value = data.admin_support_whatsapp || ''; // LOAD NEW FIELD
+                
+                document.getElementById('social-fb').value = data.facebook_url || '';
+                document.getElementById('social-yt').value = data.youtube_url || '';
+                document.getElementById('social-ig').value = data.instagram_url || '';
+                document.getElementById('social-wa').value = data.whatsapp_url || '';
+                document.getElementById('social-tg').value = data.telegram_url || '';
+            }
+        }
+        document.getElementById('settings-form').addEventListener('submit', async(e)=>{ 
+            e.preventDefault(); 
+            saveSettings({
+                address: document.getElementById('setting-address').value, 
+                contact_number: document.getElementById('setting-phone').value, 
+                email: document.getElementById('setting-email').value,
+                admin_support_whatsapp: document.getElementById('setting-admin-wa').value // SAVE NEW FIELD
+            }); 
+        });
+        document.getElementById('socials-form').addEventListener('submit', async(e)=>{ e.preventDefault(); saveSettings({facebook_url: document.getElementById('social-fb').value, youtube_url: document.getElementById('social-yt').value, instagram_url: document.getElementById('social-ig').value, whatsapp_url: document.getElementById('social-wa').value, telegram_url: document.getElementById('social-tg').value}); });
+        
+        async function saveSettings(payload) {
+             const { data } = await supabaseClient.from('site_settings').select('id').limit(1);
+             if(data.length) await supabaseClient.from('site_settings').update(payload).eq('id', data[0].id);
+             else await supabaseClient.from('site_settings').insert([payload]);
+             alert("Saved!");
+        }
+
+    </script>
+</body>
+</html>

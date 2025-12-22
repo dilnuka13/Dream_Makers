@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Downloads - Dream Makers</title>
-    <!-- FAVICON ADDED HERE -->
+    <title>Contact Us - Dream Makers</title>
     <link rel="icon" type="image/png" href="https://dilnuka13.github.io/Dream_Makers/logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,9 +20,6 @@
         .dark .glass-sidebar { background: rgba(15, 23, 42, 0.9); border-right: 1px solid rgba(255, 255, 255, 0.05); }
         .nav-item.active { background: linear-gradient(to right, #eff6ff, #ffffff); color: #1e3a8a; border-right: 3px solid #1e3a8a; }
         .dark .nav-item.active { background: linear-gradient(to right, #1e293b, #0f172a); color: #60a5fa; border-right: 3px solid #60a5fa; }
-        .shimmer { background: #e2e8f0; background-image: linear-gradient(to right, #e2e8f0 0%, #f1f5f9 20%, #e2e8f0 40%, #e2e8f0 100%); background-size: 800px 100%; animation: shimmer 1.5s infinite linear; }
-        .dark .shimmer { background: #334155; background-image: linear-gradient(to right, #334155 0%, #475569 20%, #334155 40%, #334155 100%); }
-        @keyframes shimmer { 0% { background-position: -468px 0; } 100% { background-position: 468px 0; } }
         
         /* Preloader Animations */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -35,20 +31,17 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
 
-    <!-- PRELOADER -->
     <div id="preloader" class="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700">
         <div class="text-center p-5">
             <h1 class="text-4xl md:text-6xl font-bold text-blue-900 dark:text-white tracking-tight animate-fade-up">Dream Makers</h1>
-            <p class="text-lg md:text-xl text-slate-500 dark:text-slate-400 mt-2 font-light tracking-widest uppercase animate-fade-up-delay">Downloads</p>
+            <p class="text-lg md:text-xl text-slate-500 dark:text-slate-400 mt-2 font-light tracking-widest uppercase animate-fade-up-delay">Contact Us</p>
             <div class="h-1 bg-blue-600 dark:bg-blue-400 mt-6 mx-auto rounded-full animate-line"></div>
         </div>
     </div>
 
-    <!-- Mobile Menu Button -->
     <button onclick="toggleSidebar()" class="lg:hidden fixed top-4 right-4 z-50 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-lg flex items-center justify-center text-blue-900 dark:text-white border border-slate-100 dark:border-slate-700 hover:bg-blue-50 transition"><i class="fas fa-bars text-xl"></i></button>
 
     <div class="flex min-h-screen">
-        <!-- SIDEBAR -->
         <aside id="sidebar-panel" class="glass-sidebar fixed inset-y-0 left-0 w-72 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col h-screen shadow-2xl lg:shadow-none">
             <div class="p-8 pb-4 flex items-center gap-4">
                 <div class="w-12 h-12 bg-[#151B54] rounded-xl flex items-center justify-center shadow-lg p-2"><img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-full h-full object-contain"></div>
@@ -68,22 +61,77 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="flex-1 lg:ml-72 p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
             <header class="flex items-center justify-between mb-8" data-aos="fade-down">
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Downloads</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Applications and documents.</p>
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Get in Touch</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">We'd love to hear from you. Send us a message.</p>
                 </div>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="downloads-list">
-                 <div class="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div class="w-10 h-10 rounded-lg shimmer"></div>
-                    <div class="flex-1 space-y-2"><div class="h-3 w-1/2 shimmer rounded"></div></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-slate-800 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-700 shadow-lg" data-aos="fade-right">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Your Name</label>
+                            <div class="relative">
+                                <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="msg-name" required class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white" placeholder="Full Name">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                            <div class="relative">
+                                <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="email" id="msg-email" required class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white" placeholder="name@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Subject</label>
+                            <div class="relative">
+                                <i class="fas fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="msg-subject" required class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white" placeholder="What is this about?">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Message</label>
+                            <textarea id="msg-content" rows="4" required class="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white" placeholder="Write your message here..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transform hover:-translate-y-1 transition flex items-center justify-center gap-2">
+                            <span>Send Message</span> <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-6" data-aos="fade-left">
+                    <div class="bg-gradient-to-br from-blue-900 to-slate-900 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition"></div>
+                        <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0"><i class="fas fa-map-marker-alt"></i></div>
+                                <div><p class="text-xs text-blue-200 uppercase tracking-wider font-bold">Address</p><p class="font-medium" id="display-address">Dikhengama, Horana, Sri Lanka</p></div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0"><i class="fas fa-phone"></i></div>
+                                <div><p class="text-xs text-blue-200 uppercase tracking-wider font-bold">Phone</p><p class="font-medium" id="display-phone">+94 71 615 5666</p></div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0"><i class="fas fa-envelope"></i></div>
+                                <div><p class="text-xs text-blue-200 uppercase tracking-wider font-bold">Email</p><p class="font-medium" id="display-email">isaradilnuka2005@gmail.com</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-slate-800 rounded-[2rem] p-8 border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+                        <h4 class="font-bold text-slate-800 dark:text-white mb-4">Follow Us</h4>
+                        <div class="flex justify-center gap-4 flex-wrap" id="social-links">
+                            </div>
+                    </div>
                 </div>
             </div>
-             <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
+
+            <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
                 <div class="flex justify-center items-center gap-4 sm:gap-6 mb-4 flex-wrap px-4">
                     <!-- Sri Lanka Flag -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Sri_Lanka.svg/1200px-Flag_of_Sri_Lanka.svg.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
@@ -123,32 +171,51 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bGduYXZldnJ2aWthb2x4b3JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzNjQyODEsImV4cCI6MjA4MTk0MDI4MX0.17BpZteoYnIYZsCs1f90VGMYnmYW6AHeXO4-1yYB7Ts';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        async function fetchDownloads() {
-            const { data: downloads } = await supabaseClient.from('downloads').select('*');
-            const container = document.getElementById('downloads-list');
-            if (downloads && downloads.length > 0) {
-                container.innerHTML = '';
-                downloads.forEach((file, index) => {
-                    let icon = 'fa-file-alt text-blue-500';
-                    if(file.file_name.toLowerCase().includes('pdf')) icon = 'fa-file-pdf text-red-500';
-                    else if(file.file_name.toLowerCase().includes('image') || file.file_name.toLowerCase().includes('jpg')) icon = 'fa-file-image text-purple-500';
+        async function loadContactInfo() {
+            const { data } = await supabaseClient.from('site_settings').select('*').limit(1).maybeSingle();
+            if (data) {
+                if(data.address) document.getElementById('display-address').innerText = data.address;
+                if(data.contact_number) document.getElementById('display-phone').innerText = data.contact_number;
+                if(data.email) document.getElementById('display-email').innerText = data.email;
 
-                    const card = `
-                    <a href="${file.file_url}" target="_blank" class="flex items-center gap-5 p-5 bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-900 transition group transform hover:-translate-y-1" data-aos="fade-up" data-aos-delay="${index * 100}">
-                        <div class="w-12 h-12 bg-slate-50 dark:bg-slate-700 rounded-xl flex items-center justify-center ${icon} text-2xl group-hover:scale-110 transition"><i class="fas ${icon.split(' ')[0]}"></i></div>
-                        <div class="flex-1 overflow-hidden">
-                            <h5 class="text-sm font-bold text-slate-800 dark:text-white truncate mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">${file.file_name}</h5>
-                            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">${file.category || 'Download'}</span>
-                        </div>
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition">
-                            <i class="fas fa-download"></i>
-                        </div>
-                    </a>`;
-                    container.innerHTML += card;
+                const socialsDiv = document.getElementById('social-links');
+                socialsDiv.innerHTML = '';
+                const links = [
+                    { url: data.facebook_url, icon: 'facebook-f', color: 'text-blue-600' },
+                    { url: data.youtube_url, icon: 'youtube', color: 'text-red-600' },
+                    { url: data.instagram_url, icon: 'instagram', color: 'text-pink-600' },
+                    { url: data.whatsapp_url, icon: 'whatsapp', color: 'text-green-500' }
+                ];
+                links.forEach(l => {
+                    if(l.url) socialsDiv.innerHTML += `<a href="${l.url}" target="_blank" class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center ${l.color} text-xl hover:scale-110 transition"><i class="fab fa-${l.icon}"></i></a>`;
                 });
-            } else { container.innerHTML = '<p class="text-slate-400 col-span-full text-center py-12">No files available.</p>'; }
+            }
         }
-        fetchDownloads();
+        loadContactInfo();
+
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            const name = document.getElementById('msg-name').value;
+            const email = document.getElementById('msg-email').value;
+            const subject = document.getElementById('msg-subject').value;
+            const message = document.getElementById('msg-content').value;
+
+            const { error } = await supabaseClient.from('messages').insert([{ name, email, subject, message, is_read: false }]);
+
+            if (error) {
+                alert('Error sending message: ' + error.message);
+            } else {
+                alert('Message sent successfully! We will get back to you soon.');
+                e.target.reset();
+            }
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
     </script>
 </body>
 </html>
