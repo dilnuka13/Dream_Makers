@@ -18,15 +18,22 @@
         body { font-family: 'Poppins', sans-serif; }
         .glass-sidebar { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.5); }
         .dark .glass-sidebar { background: rgba(15, 23, 42, 0.9); border-right: 1px solid rgba(255, 255, 255, 0.05); }
+        
         .nav-item.active { background: linear-gradient(to right, #eff6ff, #ffffff); color: #1e3a8a; border-right: 3px solid #1e3a8a; }
         .dark .nav-item.active { background: linear-gradient(to right, #1e293b, #0f172a); color: #60a5fa; border-right: 3px solid #60a5fa; }
         
-        /* Preloader Animations */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes lineGrow { from { width: 0; } to { width: 6rem; } }
         .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
         .animate-fade-up-delay { opacity: 0; animation: fadeInUp 0.8s ease-out 0.3s forwards; }
         .animate-line { width: 0; animation: lineGrow 1s ease-in-out 0.5s forwards; }
+
+        /* Google Translate */
+        .goog-te-banner-frame.skiptranslate { display: none !important; } 
+        body { top: 0px !important; }
+        .goog-te-gadget-simple { background-color: transparent !important; border: none !important; }
+        .goog-te-gadget-simple .goog-te-menu-value span { color: #475569 !important; font-weight: bold; }
+        .dark .goog-te-gadget-simple .goog-te-menu-value span { color: #cbd5e1 !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
@@ -54,6 +61,8 @@
                 <a href="sports.html" class="nav-item flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group"><span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-running"></i></span><span>Sports</span></a>
                 <a href="events.html" class="nav-item flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group"><span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-calendar-alt"></i></span><span>Events</span></a>
                 <a href="downloads.html" class="nav-item flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group"><span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-download"></i></span><span>Downloads</span></a>
+                
+                <!-- ACTIVE: Contact -->
                 <a href="contact.html" class="nav-item active flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group"><span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-envelope"></i></span><span>Contact</span></a>
             </nav>
             <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
@@ -62,6 +71,9 @@
         </aside>
 
         <main class="flex-1 lg:ml-72 p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+            <div class="flex items-center gap-3 mb-4 lg:hidden">
+                <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-500 hover:text-blue-600 hover:scale-105 transition"><i class="fas fa-arrow-left"></i></button>
+            </div>
             <header class="flex items-center justify-between mb-8" data-aos="fade-down">
                 <div>
                     <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Get in Touch</h2>
@@ -133,19 +145,10 @@
 
             <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
                 <div class="flex justify-center items-center gap-4 sm:gap-6 mb-4 flex-wrap px-4">
-                    <!-- Sri Lanka Flag -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Sri_Lanka.svg/1200px-Flag_of_Sri_Lanka.svg.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
-                    
-                    <!-- Western Province Flag -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Western_Province_Flag_%28SRI_LANKA%29.png/330px-Western_Province_Flag_%28SRI_LANKA%29.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
-                    
-                    <!-- Emblem -->
                     <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Emblem_of_Sri_Lanka.svg" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
-                    
-                    <!-- Club Logo 1 -->
                     <img src="https://dilnuka13.github.io/Dream_Makers/1750483906074.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
-                    
-                    <!-- Club Logo 2 -->
                     <img src="https://dilnuka13.github.io/Dream_Makers/119.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
                 </div>
                 <p class="text-slate-500 text-sm pb-4">
@@ -153,6 +156,20 @@
                 </p>
             </footer>
         </main>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-3">
+        <button onclick="window.history.back()" class="w-12 h-12 bg-white dark:bg-slate-800 text-slate-700 dark:text-white rounded-full shadow-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition transform hover:scale-110 active:scale-95">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="relative group">
+            <button id="translate-btn" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition transform hover:scale-110 overflow-hidden">
+                <i class="fas fa-language text-xl"></i>
+            </button>
+            <div class="absolute bottom-14 right-0 bg-white dark:bg-slate-900 p-2 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 hidden group-hover:block w-48 transition-all duration-300 transform origin-bottom-right">
+                <div id="google_translate_element"></div>
+            </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -216,6 +233,16 @@
             btn.innerHTML = originalText;
             btn.disabled = false;
         });
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,si,ta',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
     </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
