@@ -36,6 +36,7 @@
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+    
     <style>
         body { font-family: 'Poppins', sans-serif; }
         
@@ -43,46 +44,128 @@
         .glass-sidebar { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(20px); 
-            border-right: 1px solid rgba(255, 255, 255, 0.5); 
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         .dark .glass-sidebar { 
             background: rgba(15, 23, 42, 0.95); 
-            border-right: 1px solid rgba(255, 255, 255, 0.05); 
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
         
         /* Navigation Active State */
+        .nav-item { position: relative; overflow: hidden; }
+        .nav-item::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+            background: linear-gradient(90deg, rgba(30, 58, 138, 0.1), transparent);
+            transition: width 0.3s ease;
+        }
+        .nav-item:hover::before { width: 100%; }
         .nav-item.active { 
-            background: linear-gradient(to right, #eff6ff, #ffffff); 
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); 
             color: #1e3a8a; 
-            border-right: 3px solid #1e3a8a; 
+            border-right: 3px solid #1e3a8a;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
         }
         .dark .nav-item.active { 
-            background: linear-gradient(to right, #1e293b, #0f172a); 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
             color: #60a5fa; 
-            border-right: 3px solid #60a5fa; 
+            border-right: 3px solid #60a5fa;
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
         }
         
         /* Animations */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
         
+        /* Enhanced Slideshow */
         .slide-bg {
             position: absolute; inset: 0; background-size: cover; background-position: center;
-            opacity: 0; transition: opacity 2s ease-in-out; z-index: 0; filter: blur(1px); transform: scale(1.02);
+            opacity: 0; transition: opacity 2s ease-in-out, transform 20s ease-out; 
+            z-index: 0; filter: blur(1px);
+            transform: scale(1);
         }
-        .slide-bg.active { opacity: 1; }
+        .slide-bg.active { opacity: 1; transform: scale(1.1); }
 
-        /* Hide Scrollbar for clean look */
+        /* Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #3b82f6, #1e3a8a); 
+            border-radius: 10px; 
         }
 
+        /* Compact Calendar Styles */
+        .calendar-widget {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .dark .calendar-widget {
+            background: #1e293b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .cal-day-cell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.7rem; /* Even Smaller Font */
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .cal-day-cell:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+        .dark .cal-day-cell:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .is-today {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #3b82f6;
+            font-weight: 700;
+        }
+        .dark .is-today {
+            background-color: #1e3a8a;
+            color: #bfdbfe;
+            border-color: #60a5fa;
+        }
+
+        /* Dots for holidays */
+        .is-poya::after {
+            content: ''; position: absolute; bottom: 2px; width: 3px; height: 3px;
+            background-color: #f59e0b; border-radius: 50%;
+        }
+        .is-public::after {
+            content: ''; position: absolute; bottom: 2px; width: 3px; height: 3px;
+            background-color: #ef4444; border-radius: 50%;
+        }
+
+        /* Officer Card */
+        .officer-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .officer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
         /* Google Translate Reset */
         .goog-te-banner-frame.skiptranslate { display: none !important; } 
         body { top: 0px !important; }
@@ -114,7 +197,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg text-slate-800 dark:text-white leading-tight">Dream Makers</h1>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Dikhenagama</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Dikhengama</p>
                 </div>
             </div>
 
@@ -137,7 +220,6 @@
                     <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-calendar-alt"></i></span><span>Events</span>
                 </button>
 
-                <!-- New Gallery Tab -->
                 <button onclick="showSection('gallery')" id="nav-gallery" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
                     <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-images"></i></span><span>Gallery</span>
                 </button>
@@ -177,7 +259,7 @@
                     
                     <div class="relative z-20 max-w-2xl">
                         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 font-bold text-xs mb-6 shadow-lg">
-                            <i class="fas fa-crown text-[10px]"></i> <span>Pride of Dikhenagama</span>
+                            <i class="fas fa-crown text-[10px]"></i> <span>Pride of Dikhengama</span>
                         </div>
                         <h1 class="text-4xl lg:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
                             Future Winning<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">Dream Makers</span>
@@ -209,23 +291,100 @@
                     </div>
                 </section>
 
-                <!-- Stats -->
-                <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-8">
-                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2" id="home-member-count">0+</div>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Members</p>
-                    </div>
-                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2" id="home-event-count">0+</div>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projects</p>
-                    </div>
-                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">5+</div>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Awards</p>
-                    </div>
-                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">2+</div>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Years History</p>
+                <!-- NEW LAYOUT: SIDE-BY-SIDE CALENDAR AND STATS -->
+                <section class="mt-12">
+                    <div class="flex flex-col lg:flex-row gap-8 items-start">
+                        
+                        <!-- LEFT SIDE: ULTRA COMPACT CALENDAR -->
+                        <div class="w-full lg:w-[350px] shrink-0">
+                            <div class="flex items-center gap-2 mb-4 px-2">
+                                <i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400"></i>
+                                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Events Calendar</h3>
+                            </div>
+
+                            <div class="calendar-widget p-4 border border-slate-100 dark:border-slate-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 id="cal-month-year" class="text-lg font-bold text-slate-800 dark:text-white tracking-tight"></h2>
+                                    <div class="flex gap-1">
+                                        <button onclick="changeMonth(-1)" class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-600 dark:text-slate-300 transition flex items-center justify-center"><i class="fas fa-chevron-left text-[9px]"></i></button>
+                                        <button onclick="changeMonth(1)" class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-600 dark:text-slate-300 transition flex items-center justify-center"><i class="fas fa-chevron-right text-[9px]"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-7 mb-2 text-center">
+                                    <div class="text-[9px] font-bold text-red-500 uppercase">Su</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">Mo</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">Tu</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">We</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">Th</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">Fr</div>
+                                    <div class="text-[9px] font-bold text-slate-400 uppercase">Sa</div>
+                                </div>
+
+                                <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+                                
+                                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
+                                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Holidays</h4>
+                                    <div class="space-y-1.5 overflow-y-auto max-h-[150px] no-scrollbar" id="month-holidays-list">
+                                        <!-- List injected here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT SIDE: STATS GRID -->
+                        <div class="flex-1 w-full">
+                            <div class="flex items-center gap-2 mb-4 px-2">
+                                <i class="fas fa-chart-pie text-blue-600 dark:text-blue-400"></i>
+                                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Club Statistics</h3>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Members -->
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition h-full">
+                                    <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-800 dark:text-white leading-none" id="stat-members">0</h4>
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Active Members</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sports -->
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition h-full">
+                                    <div class="w-14 h-14 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 text-xl">
+                                        <i class="fas fa-running"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-800 dark:text-white leading-none" id="stat-sports">0</h4>
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Sports Teams</p>
+                                    </div>
+                                </div>
+
+                                <!-- Events -->
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition h-full">
+                                    <div class="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 text-xl">
+                                        <i class="fas fa-calendar-star"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-800 dark:text-white leading-none" id="stat-events">0</h4>
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Events Held</p>
+                                    </div>
+                                </div>
+
+                                <!-- Club Since -->
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition h-full">
+                                    <div class="w-14 h-14 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 text-xl">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-800 dark:text-white leading-none" id="stat-since">2023</h4>
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Club Since</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -239,20 +398,20 @@
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
                     <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700">
                         <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4"><i class="fas fa-eye"></i></div>
-                        <h3 class="font-bold text-xl dark:text-white mb-2">Our Vision</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">To be the beacon of hope and empowerment for the youth of Dikhenagama, fostering a generation of disciplined, united, and successful individuals.</p>
+                        <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-2">Our Vision</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">To be the beacon of hope and empowerment for the youth of Dikhengama, fostering a generation of disciplined, united, and successful individuals.</p>
                     </div>
                      <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700">
                         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i class="fas fa-bullseye"></i></div>
-                        <h3 class="font-bold text-xl dark:text-white mb-2">Our Mission</h3>
+                        <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-2">Our Mission</h3>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Creating opportunities through sports, education, and community service to develop leadership skills and social responsibility among our members.</p>
                     </div>
                 </div>
                 
-                <h3 class="font-bold text-xl dark:text-white mb-4">Executive Committee</h3>
-                <div id="officers-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"></div>
+                <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-6">Executive Committee</h3>
+                <!-- IMPROVED OFFICERS GRID -->
+                <div id="officers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"></div>
 
-                <!-- Members List -->
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Our Members</h3>
                     <div class="h-1 w-20 bg-green-600 rounded-full hidden md:block"></div>
@@ -281,7 +440,7 @@
                     <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Sports Teams</h2>
                     <p class="text-sm text-slate-500 dark:text-slate-400">Our talented teams.</p>
                 </header>
-                <div id="sports-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="sports-list"></div>
             </div>
 
             <!-- 4. EVENTS SECTION -->
@@ -302,14 +461,10 @@
                     </div>
                 </header>
                 
-                <!-- Album View -->
                 <div id="gallery-albums-view">
-                    <div id="albums-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <!-- Albums will load here -->
-                    </div>
+                    <div id="albums-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
                 </div>
 
-                <!-- Single Album Images View -->
                 <div id="gallery-images-view" class="hidden">
                     <button onclick="closeAlbum()" class="mb-6 flex items-center gap-2 text-slate-500 hover:text-blue-600 transition font-bold text-sm">
                         <i class="fas fa-arrow-left"></i> Back to Albums
@@ -321,10 +476,7 @@
                         </div>
                         <button onclick="shareAlbum()" class="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 p-2 rounded-lg text-xs font-bold"><i class="fas fa-share-alt mr-1"></i> Share</button>
                     </div>
-                    
-                    <div id="album-images-grid" class="columns-1 md:columns-3 gap-4 space-y-4">
-                        <!-- Images will load here -->
-                    </div>
+                    <div id="album-images-grid" class="columns-1 md:columns-3 gap-4 space-y-4"></div>
                 </div>
             </div>
 
@@ -358,7 +510,6 @@
                             <p class="mb-2"><i class="fas fa-phone w-6"></i> <span id="contact-phone">Loading...</span></p>
                             <p><i class="fas fa-envelope w-6"></i> <span id="contact-email">Loading...</span></p>
                          </div>
-                         <!-- Social Media Links Section -->
                          <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm text-center">
                             <h4 class="font-bold text-slate-800 dark:text-white mb-4">Follow Us</h4>
                             <div class="flex justify-center gap-4 flex-wrap" id="contact-social-links">
@@ -369,28 +520,95 @@
                 </div>
             </div>
 
-            <!-- Footer -->
-            <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
-                <!-- Footer Side Social Icons -->
-                <div class="flex justify-center gap-4 mb-6" id="footer-social-links">
-                    <!-- Loaded via JS -->
-                </div>
+            <!-- MODERN FOOTER -->
+            <footer class="mt-20 bg-[#020617] text-slate-300 pt-16 pb-8 rounded-t-[3rem] relative overflow-hidden">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
+                <div class="container mx-auto px-6 lg:px-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16 border-b border-slate-800/60 pb-12">
+                        <!-- Col 1: Brand -->
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">DM</div>
+                                <div>
+                                    <h2 class="text-white font-bold text-lg leading-none">Dream Makers</h2>
+                                    <p class="text-[10px] text-blue-400 uppercase tracking-[0.2em] font-bold">Youth & Sport Club</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-400 leading-relaxed">Empowering the youth of Dikhengama through sport, discipline, and community leadership.</p>
+                            <div class="flex gap-3" id="footer-social-new"></div>
+                        </div>
 
-                <div class="flex justify-center items-center gap-4 sm:gap-6 mb-4 flex-wrap px-4">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Sri_Lanka.svg/1200px-Flag_of_Sri_Lanka.svg.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Western_Province_Flag_%28SRI_LANKA%29.png/330px-Western_Province_Flag_%28SRI_LANKA%29.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Emblem_of_Sri_Lanka.svg" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
-                    <img src="https://dilnuka13.github.io/Dream_Makers/1750483906074.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
-                    <img src="https://dilnuka13.github.io/Dream_Makers/119.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
+                        <!-- Col 2: Navigation -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-6">
+                                <div class="w-1 h-4 bg-blue-500 rounded-full"></div>
+                                <h3 class="text-white font-bold uppercase tracking-wider text-sm">Navigation</h3>
+                            </div>
+                            <ul class="space-y-3 text-sm font-medium">
+                                <li><a href="#" onclick="showSection('home')" class="hover:text-blue-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Home</a></li>
+                                <li><a href="#" onclick="showSection('about')" class="hover:text-blue-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> About Us</a></li>
+                                <li><a href="#" onclick="showSection('sports')" class="hover:text-blue-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Sports</a></li>
+                                <li><a href="#" onclick="showSection('events')" class="hover:text-blue-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Events</a></li>
+                                <li><a href="#" onclick="showSection('contact')" class="hover:text-blue-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Contact</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: Contact Details -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-6">
+                                <div class="w-1 h-4 bg-blue-500 rounded-full"></div>
+                                <h3 class="text-white font-bold uppercase tracking-wider text-sm">Contact Details</h3>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-blue-500 shrink-0"><i class="fas fa-map-marker-alt"></i></div>
+                                    <div>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase">Location</p>
+                                        <p class="text-sm text-white" id="footer-address-new">Dikhengama, Horana</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-green-500 shrink-0"><i class="fas fa-phone-alt"></i></div>
+                                    <div>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase">Direct Line</p>
+                                        <p class="text-sm text-white" id="footer-phone-new">+94 00 000 0000</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-purple-500 shrink-0"><i class="fas fa-envelope"></i></div>
+                                    <div>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase">Support Email</p>
+                                        <p class="text-sm text-white" id="footer-email-new">info@dmyc.lk</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 4: Official Partners -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-6">
+                                <div class="w-1 h-4 bg-blue-500 rounded-full"></div>
+                                <h3 class="text-white font-bold uppercase tracking-wider text-sm">Official Partners</h3>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="aspect-square bg-slate-800/50 rounded-xl p-2 flex items-center justify-center border border-slate-700 hover:border-blue-500 transition cursor-pointer"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Sri_Lanka.svg/1200px-Flag_of_Sri_Lanka.svg.png" class="w-full h-full object-contain"></div>
+                                <div class="aspect-square bg-slate-800/50 rounded-xl p-2 flex items-center justify-center border border-slate-700 hover:border-blue-500 transition cursor-pointer"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Emblem_of_Sri_Lanka.svg" class="w-full h-full object-contain"></div>
+                                <div class="aspect-square bg-slate-800/50 rounded-xl p-2 flex items-center justify-center border border-slate-700 hover:border-blue-500 transition cursor-pointer"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Western_Province_Flag_%28SRI_LANKA%29.png/330px-Western_Province_Flag_%28SRI_LANKA%29.png" class="w-full h-full object-contain"></div>
+                                <div class="aspect-square bg-slate-800/50 rounded-xl p-2 flex items-center justify-center border border-slate-700 hover:border-blue-500 transition cursor-pointer"><img src="https://dilnuka13.github.io/Dream_Makers/119.png" class="w-full h-full object-contain"></div>
+                                <div class="aspect-square bg-slate-800/50 rounded-xl p-2 flex items-center justify-center border border-slate-700 hover:border-blue-500 transition cursor-pointer"><img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-full h-full object-contain"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-medium">
+                        <p>&copy; 2025 Dream Makers Youth & Sport Club. All rights reserved.</p>
+                        <p>Designed & Developed by <a href="https://dilnuka13.github.io/my/" class="text-blue-500 hover:text-white transition">Isara Dilnuka</a></p>
+                    </div>
                 </div>
-                <p class="text-slate-500 text-sm pb-4">
-                    &copy; 2025 Dream Makers Youth & Sport Club. Developed by <a href="https://dilnuka13.github.io/my/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline font-bold">Isara Dilnuka</a>.
-                </p>
             </footer>
         </main>
     </div>
 
-    <!-- Join Modal (Detailed Form) -->
+    <!-- Join Modal -->
     <div id="join-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-lg p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
             <button onclick="document.getElementById('join-modal').classList.add('hidden')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:text-red-500 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
@@ -448,10 +666,7 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${id}`).classList.add('active');
             
-            // Close mobile menu if open
             if(window.innerWidth < 1024) document.getElementById('sidebar-panel').classList.add('-translate-x-full');
-            
-            // Load Data specifics
             if(id === 'gallery') fetchAlbums();
         }
 
@@ -462,17 +677,161 @@
             }, 1500);
             fetchHomeData();
             fetchOfficers();
-            fetchMembers(); // Load Members
+            fetchMembers();
             fetchSports();
             fetchEvents();
             fetchDownloads();
             fetchContact();
+            initCalendar(); // Init Calendar
         });
 
+        // --- CALENDAR LOGIC ---
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Sri Lankan Public Holidays & Poya Days (2025-2028)
+        const slHolidays = {
+            // 2025
+            '2025-01-13': { type: 'poya', name: 'Duruthu Poya' },
+            '2025-01-14': { type: 'public', name: 'Tamil Thai Pongal' },
+            '2025-02-04': { type: 'public', name: 'Independence Day' },
+            '2025-02-12': { type: 'poya', name: 'Navam Poya' },
+            '2025-03-13': { type: 'poya', name: 'Medin Poya' },
+            '2025-04-12': { type: 'poya', name: 'Bak Poya' },
+            '2025-04-13': { type: 'public', name: 'New Year' },
+            '2025-04-14': { type: 'public', name: 'New Year' },
+            '2025-05-01': { type: 'public', name: 'May Day' },
+            '2025-05-12': { type: 'poya', name: 'Vesak Poya' },
+            '2025-05-13': { type: 'public', name: 'Day after Vesak' },
+            '2025-06-10': { type: 'poya', name: 'Poson Poya' },
+            '2025-07-10': { type: 'poya', name: 'Esala Poya' },
+            '2025-08-08': { type: 'poya', name: 'Nikini Poya' },
+            '2025-09-07': { type: 'poya', name: 'Binara Poya' },
+            '2025-10-06': { type: 'poya', name: 'Vap Poya' },
+            '2025-11-05': { type: 'poya', name: 'Il Poya' },
+            '2025-12-04': { type: 'poya', name: 'Unduvap Poya' },
+            '2025-12-25': { type: 'public', name: 'Christmas Day' },
+            
+            // 2026 (Approx)
+            '2026-01-02': { type: 'poya', name: 'Duruthu Poya' },
+            '2026-01-14': { type: 'public', name: 'Tamil Thai Pongal' },
+            '2026-02-01': { type: 'poya', name: 'Navam Poya' },
+            '2026-02-04': { type: 'public', name: 'Independence Day' },
+            '2026-03-02': { type: 'poya', name: 'Medin Poya' },
+            '2026-04-01': { type: 'poya', name: 'Bak Poya' },
+            '2026-04-13': { type: 'public', name: 'New Year' },
+            '2026-04-14': { type: 'public', name: 'New Year' },
+            '2026-05-01': { type: 'public', name: 'May Day' },
+            '2026-05-31': { type: 'poya', name: 'Vesak Poya' },
+            '2026-06-29': { type: 'poya', name: 'Poson Poya' },
+            '2026-07-28': { type: 'poya', name: 'Esala Poya' },
+            '2026-08-27': { type: 'poya', name: 'Nikini Poya' },
+            '2026-09-25': { type: 'poya', name: 'Binara Poya' },
+            '2026-10-25': { type: 'poya', name: 'Vap Poya' },
+            '2026-11-23': { type: 'poya', name: 'Il Poya' },
+            '2026-12-23': { type: 'poya', name: 'Unduvap Poya' },
+            '2026-12-25': { type: 'public', name: 'Christmas Day' },
+
+            // 2027 (Approx)
+            '2027-01-14': { type: 'public', name: 'Tamil Thai Pongal' },
+            '2027-01-21': { type: 'poya', name: 'Duruthu Poya' },
+            '2027-02-04': { type: 'public', name: 'Independence Day' },
+            '2027-02-20': { type: 'poya', name: 'Navam Poya' },
+            '2027-04-13': { type: 'public', name: 'New Year' },
+            '2027-04-14': { type: 'public', name: 'New Year' },
+            '2027-05-01': { type: 'public', name: 'May Day' },
+            '2027-05-20': { type: 'poya', name: 'Vesak Poya' },
+            '2027-06-18': { type: 'poya', name: 'Poson Poya' },
+            '2027-12-25': { type: 'public', name: 'Christmas Day' },
+
+            // 2028 (Approx)
+            '2028-01-11': { type: 'poya', name: 'Duruthu Poya' },
+            '2028-01-14': { type: 'public', name: 'Tamil Thai Pongal' },
+            '2028-02-04': { type: 'public', name: 'Independence Day' },
+            '2028-02-10': { type: 'poya', name: 'Navam Poya' },
+            '2028-04-13': { type: 'public', name: 'New Year' },
+            '2028-04-14': { type: 'public', name: 'New Year' },
+            '2028-05-01': { type: 'public', name: 'May Day' },
+            '2028-05-08': { type: 'poya', name: 'Vesak Poya' },
+            '2028-06-07': { type: 'poya', name: 'Poson Poya' },
+            '2028-12-25': { type: 'public', name: 'Christmas Day' }
+        };
+
+        function initCalendar() {
+            renderCalendar(currentMonth, currentYear);
+        }
+
+        function changeMonth(dir) {
+            currentMonth += dir;
+            if(currentMonth < 0) { currentMonth = 11; currentYear--; }
+            if(currentMonth > 11) { currentMonth = 0; currentYear++; }
+            renderCalendar(currentMonth, currentYear);
+        }
+
+        function renderCalendar(month, year) {
+            const grid = document.getElementById('calendar-grid');
+            const monthTitle = document.getElementById('cal-month-year');
+            const holidaysList = document.getElementById('month-holidays-list');
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+
+            monthTitle.innerText = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+            
+            grid.innerHTML = '';
+            holidaysList.innerHTML = '';
+
+            let hasHoliday = false;
+
+            // Empty slots
+            for(let i=0; i<firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            // Days
+            for(let d=1; d<=daysInMonth; d++) {
+                const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                let classes = "cal-day-cell text-slate-600 dark:text-slate-300";
+                
+                // Check Holidays
+                if(slHolidays[dateKey]) {
+                    const h = slHolidays[dateKey];
+                    if(h.type === 'poya') classes += " is-poya";
+                    else if(h.type === 'public') classes += " is-public";
+                    
+                    // Add to side list (Compact Version)
+                    const displayDate = new Date(dateKey).toLocaleDateString('default', { month: 'short', day: 'numeric' });
+                    const iconColor = h.type === 'poya' ? 'text-yellow-500' : 'text-red-500';
+                    const icon = h.type === 'poya' ? 'fa-moon' : 'fa-calendar-check';
+                    
+                    holidaysList.innerHTML += `
+                        <div class="flex items-center gap-2 p-2 bg-white dark:bg-slate-700 rounded-lg border border-slate-100 dark:border-slate-600">
+                            <div class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-600 flex items-center justify-center ${iconColor} text-[10px]"><i class="fas ${icon}"></i></div>
+                            <div>
+                                <h5 class="text-[10px] font-bold text-slate-800 dark:text-white leading-tight">${h.name}</h5>
+                                <p class="text-[9px] text-slate-400 font-mono leading-none">${displayDate}</p>
+                            </div>
+                        </div>
+                    `;
+                    hasHoliday = true;
+                }
+                
+                // Check Today
+                if(d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    classes += " is-today";
+                }
+
+                grid.innerHTML += `<div class="${classes}">${d}</div>`;
+            }
+
+            if(!hasHoliday) {
+                holidaysList.innerHTML = `<p class="text-[10px] text-slate-400 text-center italic py-2">No holidays.</p>`;
+            }
+        }
+
         // --- DATA FETCHING ---
-        
         async function fetchHomeData() {
-            // Slideshow
             const { data: slides } = await supabaseClient.from('slideshow_images').select('*').order('display_order');
             const hero = document.getElementById('hero-slideshow');
             if(slides && slides.length > 0) {
@@ -490,18 +849,11 @@
                     hero.children[idx].classList.add('active');
                 }, 5000);
             }
-
-            // Stats
-            const { count: mCount } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
-            document.getElementById('home-member-count').innerText = mCount || '0+';
-            const { count: eCount } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
-            document.getElementById('home-event-count').innerText = eCount || '0+';
             
-            // Quick Links
+            // QUICK LINKS
             const { data: qLinks } = await supabaseClient.from('quick_links').select('*').eq('is_active', true).order('display_order');
             const qContainer = document.getElementById('quick-links-container');
             const qSection = document.getElementById('quick-links-section');
-            
             if (qLinks && qLinks.length > 0) {
                 qContainer.innerHTML = '';
                 qLinks.forEach(link => {
@@ -513,6 +865,16 @@
                 });
                 qSection.classList.remove('hidden');
             } else { qSection.classList.add('hidden'); }
+
+            // STATS FETCHING
+            const { count: mCount } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-members').innerText = mCount || '0+';
+
+            const { count: sCount } = await supabaseClient.from('sports_teams').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-sports').innerText = sCount || '0+';
+
+            const { count: eCount } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-events').innerText = eCount || '0+';
         }
 
         async function fetchOfficers() {
@@ -521,23 +883,28 @@
             if(data) {
                 grid.innerHTML = '';
                 data.forEach(o => {
-                    // Privacy Check
-                    const showEmail = o.show_email ? `<p class="text-xs text-slate-500 mt-1">${o.email}</p>` : '';
-                    const showPhone = o.show_phone ? `<p class="text-xs text-slate-500 mt-1">${o.phone}</p>` : '';
-                    
+                    const appointedDate = o.appointed_date ? new Date(o.appointed_date).toLocaleDateString() : 'Since 2023';
+                    const email = o.email || 'N/A';
+                    const phone = o.phone || 'N/A';
+
                     grid.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 text-center hover:shadow-lg transition">
-                        <img src="${o.image_url || 'https://via.placeholder.com/150'}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50 dark:border-slate-700">
-                        <h4 class="font-bold text-slate-800 dark:text-white">${o.name}</h4>
-                        <p class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-2">${o.position}</p>
-                        ${showEmail}
-                        ${showPhone}
+                    <div class="officer-card bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-lg border border-slate-100 dark:border-slate-700 relative group">
+                        <div class="h-24 bg-gradient-to-r from-blue-600 to-blue-900 relative"><div class="absolute inset-0 bg-black/10"></div></div>
+                        <div class="px-6 pb-6 pt-0 relative text-center">
+                            <div class="relative -mt-12 mb-4 inline-block"><img src="${o.image_url || 'https://via.placeholder.com/150'}" class="w-24 h-24 rounded-2xl object-cover border-4 border-white dark:border-slate-800 shadow-lg bg-white"></div>
+                            <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-1">${o.name}</h4>
+                            <span class="inline-block px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase rounded-full mb-4 tracking-wide">${o.position}</span>
+                            <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 text-left space-y-3">
+                                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-600 flex items-center justify-center text-blue-500 shadow-sm"><i class="fas fa-calendar-check text-xs"></i></div><div><p class="text-[10px] text-slate-400 uppercase font-bold">Appointed</p><p class="text-xs font-semibold text-slate-700 dark:text-slate-200">${appointedDate}</p></div></div>
+                                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-600 flex items-center justify-center text-green-500 shadow-sm"><i class="fas fa-phone-alt text-xs"></i></div><div><p class="text-[10px] text-slate-400 uppercase font-bold">Contact</p><p class="text-xs font-semibold text-slate-700 dark:text-slate-200">${phone}</p></div></div>
+                                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white dark:bg-slate-600 flex items-center justify-center text-purple-500 shadow-sm"><i class="fas fa-envelope text-xs"></i></div><div class="overflow-hidden"><p class="text-[10px] text-slate-400 uppercase font-bold">Email</p><p class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate" title="${email}">${email}</p></div></div>
+                            </div>
+                        </div>
                     </div>`;
                 });
             }
         }
         
-        // Function to calculate age
         function calculateAge(dateString) {
             if (!dateString) return 'N/A';
             const today = new Date();
@@ -549,70 +916,44 @@
         }
 
         async function fetchMembers() {
-            const { data: members, error } = await supabaseClient
-                .from('members')
-                .select('*')
-                .eq('status', 'active')
-                .order('full_name');
-
+            const { data: members } = await supabaseClient.from('members').select('*').eq('status', 'active').order('full_name');
             const container = document.getElementById('members-list');
-            
             if (members && members.length > 0) {
                 container.innerHTML = '';
                 members.forEach(member => {
                     const age = calculateAge(member.dob);
                     const name = member.name_with_initials || member.full_name;
-                    
-                    const row = `
+                    container.innerHTML += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
                         <td class="px-6 py-4 font-medium text-slate-700 dark:text-slate-200">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xs font-bold">
-                                    ${name.charAt(0).toUpperCase()}
-                                </div>
+                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xs font-bold">${name.charAt(0).toUpperCase()}</div>
                                 ${name}
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400">${age}</td>
-                        <td class="px-6 py-4 text-right">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                Active
-                            </span>
-                        </td>
+                        <td class="px-6 py-4 text-right"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Active</span></td>
                     </tr>`;
-                    container.innerHTML += row;
                 });
-            } else {
-                container.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-400 italic">No active members yet.</td></tr>';
-            }
+            } else { container.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-400 italic">No active members yet.</td></tr>'; }
         }
 
         async function fetchSports() {
             const { data } = await supabaseClient.from('sports_teams').select('*');
             const list = document.getElementById('sports-list');
+            list.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"; 
             if(data) {
                 list.innerHTML = '';
                 data.forEach(s => {
                     const pageLink = `${s.sport_name.replace(/\s+/g, '_').toLowerCase()}.html`;
-                    
                     list.innerHTML += `
-                    <div class="group relative flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-lg transition overflow-hidden">
-                        
-                        <!-- Hover Popup Content -->
-                        <div class="absolute inset-0 bg-blue-900/90 flex flex-col items-center justify-center text-white p-6 opacity-0 group-hover:opacity-100 transition duration-300 z-10 text-center">
-                            <h4 class="font-bold text-xl mb-1">${s.sport_name}</h4>
-                            <p class="text-sm mb-2">Captain: ${s.captain_name || 'TBA'}</p>
-                            <p class="text-xs opacity-80 line-clamp-3 mb-4">${s.description || 'No description available.'}</p>
-                            <a href="${pageLink}" class="bg-white text-blue-900 px-4 py-2 rounded-full text-xs font-bold hover:bg-blue-50 transition">View Details</a>
-                        </div>
-
-                        <div class="w-20 h-20 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-3xl overflow-hidden shrink-0">
-                            ${s.team_photo_url ? `<img src="${s.team_photo_url}" class="w-full h-full object-cover">` : `<i class="fas fa-trophy text-blue-500"></i>`}
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-white">${s.sport_name}</h4>
-                            <p class="text-xs text-slate-500 mb-2">Capt: ${s.captain_name || 'N/A'}</p>
-                            <a href="${pageLink}" class="text-xs font-bold text-blue-600 hover:underline">View Page <i class="fas fa-arrow-right ml-1"></i></a>
+                    <div class="bg-[#111827] dark:bg-[#0f172a] rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-blue-900/20 transition-all duration-300 group border border-slate-800 relative flex flex-col h-full">
+                        <div class="h-56 relative overflow-hidden"><img src="${s.team_photo_url || 'https://via.placeholder.com/400x300'}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700"><div class="absolute inset-0 bg-gradient-to-t from-[#111827] to-transparent opacity-80"></div><div class="absolute top-4 left-4 bg-cyan-500/20 backdrop-blur-md border border-cyan-400/30 text-cyan-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">Active Team</div></div>
+                        <div class="p-6 pt-2 flex flex-col flex-1">
+                            <div class="flex justify-between items-start mb-3"><h4 class="text-2xl font-extrabold text-white tracking-tight">${s.sport_name}</h4><div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-slate-400"><i class="fas fa-trophy"></i></div></div>
+                            <div class="flex items-center gap-2 mb-4 text-sm text-slate-400"><i class="fas fa-user-circle"></i><span>Captain: <span class="text-slate-200 font-semibold">${s.captain_name || 'TBA'}</span></span></div>
+                            <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-3 flex-1">${s.description || 'A dynamic team sport designed to improve fitness, teamwork, and competitive spirit.'}</p>
+                            <a href="${pageLink}" class="w-full py-3 bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2 mt-auto group-hover:shadow-lg">Learn More <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i></a>
                         </div>
                     </div>`;
                 });
@@ -630,17 +971,8 @@
                     const day = date.getDate();
                     list.innerHTML += `
                     <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 group hover:shadow-xl transition">
-                        <div class="h-48 bg-slate-200 relative">
-                            <img src="${e.cover_image_url || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x200?text=Event'">
-                            <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 rounded-xl px-3 py-2 text-center shadow">
-                                <span class="block text-xs font-bold text-slate-500 uppercase">${month}</span>
-                                <span class="block text-xl font-extrabold text-blue-900 dark:text-white">${day}</span>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-2 line-clamp-1">${e.title}</h4>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${e.description || ''}</p>
-                        </div>
+                        <div class="h-48 bg-slate-200 relative"><img src="${e.cover_image_url || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x200?text=Event'"><div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 rounded-xl px-3 py-2 text-center shadow"><span class="block text-xs font-bold text-slate-500 uppercase">${month}</span><span class="block text-xl font-extrabold text-blue-900 dark:text-white">${day}</span></div></div>
+                        <div class="p-6"><h4 class="font-bold text-lg text-slate-800 dark:text-white mb-2 line-clamp-1">${e.title}</h4><p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${e.description || ''}</p></div>
                     </div>`;
                 });
             }
@@ -652,18 +984,13 @@
             if(data) {
                 list.innerHTML = '';
                 data.forEach(d => {
-                    // Restore Icon Logic
                     let icon = 'fa-file-alt text-blue-500';
                     if(d.file_name.toLowerCase().includes('pdf')) icon = 'fa-file-pdf text-red-500';
                     else if(d.file_name.toLowerCase().includes('image') || d.file_name.toLowerCase().includes('jpg')) icon = 'fa-file-image text-purple-500';
-                    
                     list.innerHTML += `
                     <a href="${d.file_url}" target="_blank" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition group">
                         <div class="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-xl ${icon} group-hover:scale-110 transition"><i class="fas ${icon.split(' ')[0]}"></i></div>
-                        <div class="flex-1">
-                            <h5 class="font-bold text-sm text-slate-800 dark:text-white line-clamp-1">${d.file_name}</h5>
-                            <span class="text-[10px] text-slate-400 uppercase tracking-wider">${d.category || 'File'}</span>
-                        </div>
+                        <div class="flex-1"><h5 class="font-bold text-sm text-slate-800 dark:text-white line-clamp-1">${d.file_name}</h5><span class="text-[10px] text-slate-400 uppercase tracking-wider">${d.category || 'File'}</span></div>
                         <i class="fas fa-download text-slate-300 group-hover:text-blue-500"></i>
                     </a>`;
                 });
@@ -673,17 +1000,15 @@
         async function fetchContact() {
             const { data } = await supabaseClient.from('site_settings').select('*').limit(1).maybeSingle();
             if(data) {
-                if(data.address) document.getElementById('contact-address').innerText = data.address;
-                if(data.contact_number) document.getElementById('contact-phone').innerText = data.contact_number;
-                if(data.email) document.getElementById('contact-email').innerText = data.email;
+                if(data.address) { document.getElementById('contact-address').innerText = data.address; const fAddr = document.getElementById('footer-address-new'); if(fAddr) fAddr.innerText = data.address; }
+                if(data.contact_number) { document.getElementById('contact-phone').innerText = data.contact_number; const fPhone = document.getElementById('footer-phone-new'); if(fPhone) fPhone.innerText = data.contact_number; }
+                if(data.email) { document.getElementById('contact-email').innerText = data.email; const fEmail = document.getElementById('footer-email-new'); if(fEmail) fEmail.innerText = data.email; }
 
-                // Populate Social Links
-                const locations = [
+                const socialLocations = [
                     { id: 'contact-social-links', class: 'w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl hover:scale-110 transition' },
                     { id: 'home-social-links', class: 'w-10 h-10 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-blue-900 transition' },
-                    { id: 'footer-social-links', class: 'w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 transition text-sm' }
+                    { id: 'footer-social-new', class: 'w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-500 transition text-slate-400' }
                 ];
-
                 const links = [
                     { url: data.facebook_url, icon: 'facebook-f', color: 'text-blue-600' },
                     { url: data.youtube_url, icon: 'youtube', color: 'text-red-600' },
@@ -691,16 +1016,12 @@
                     { url: data.whatsapp_url, icon: 'whatsapp', color: 'text-green-500' },
                     { url: data.telegram_url, icon: 'telegram', color: 'text-blue-400' }
                 ];
-                
-                let hasLinks = false;
-                
-                locations.forEach(loc => {
+                socialLocations.forEach(loc => {
                     const el = document.getElementById(loc.id);
                     if(el) {
                         el.innerHTML = '';
                         links.forEach(l => {
                             if(l.url) {
-                                hasLinks = true;
                                 const colorClass = (loc.id === 'contact-social-links') ? l.color : ''; 
                                 el.innerHTML += `<a href="${l.url}" target="_blank" class="${loc.class} ${colorClass}"><i class="fab fa-${l.icon}"></i></a>`;
                             }
@@ -710,7 +1031,6 @@
             }
         }
 
-        // --- GALLERY LOGIC (NEW) ---
         async function fetchAlbums() {
             const { data: albums } = await supabaseClient.from('gallery_albums').select('*').eq('is_hidden', false).order('event_date', { ascending: false });
             const grid = document.getElementById('albums-grid');
@@ -719,33 +1039,24 @@
                 albums.forEach(album => {
                     grid.innerHTML += `
                     <div onclick="openAlbum(${album.id}, '${album.title}', '${album.event_date}')" class="cursor-pointer group">
-                        <div class="aspect-square rounded-3xl overflow-hidden mb-3 relative">
-                            <img src="${album.cover_image_url}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
-                        </div>
+                        <div class="aspect-square rounded-3xl overflow-hidden mb-3 relative"><img src="${album.cover_image_url}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div></div>
                         <h4 class="font-bold text-slate-800 dark:text-white group-hover:text-blue-600 transition">${album.title}</h4>
                         <p class="text-xs text-slate-500">${new Date(album.event_date).toLocaleDateString()}</p>
                     </div>`;
                 });
-            } else {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No albums found.</p>';
-            }
+            } else { grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No albums found.</p>'; }
         }
 
         let currentAlbumId = null;
-
         async function openAlbum(id, title, date) {
             currentAlbumId = id;
             document.getElementById('gallery-albums-view').classList.add('hidden');
             document.getElementById('gallery-images-view').classList.remove('hidden');
             document.getElementById('current-album-title').innerText = title;
             document.getElementById('current-album-date').innerText = new Date(date).toDateString();
-            
             const grid = document.getElementById('album-images-grid');
             grid.innerHTML = '<p class="text-center w-full">Loading...</p>';
-            
             const { data: images } = await supabaseClient.from('gallery_images').select('*').eq('album_id', id).eq('is_hidden', false);
-            
             grid.innerHTML = '';
             if(images && images.length > 0) {
                 images.forEach(img => {
@@ -753,17 +1064,13 @@
                     <div class="break-inside-avoid mb-4 rounded-2xl overflow-hidden hover:opacity-90 transition relative group">
                         <img src="${img.image_url}" class="w-full h-auto" loading="lazy">
                         ${img.caption ? `<p class="text-xs text-center p-2 bg-slate-50 dark:bg-slate-800">${img.caption}</p>` : ''}
-                        
-                        <!-- Overlay Buttons -->
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
                             <a href="${img.image_url}" download target="_blank" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:text-blue-600 hover:scale-110 transition" title="Download"><i class="fas fa-download"></i></a>
                             <button onclick="copyToClipboard('${img.image_url}')" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:text-green-600 hover:scale-110 transition" title="Copy Link"><i class="fas fa-link"></i></button>
                         </div>
                     </div>`;
                 });
-            } else {
-                grid.innerHTML = '<p class="text-slate-400">No images in this album.</p>';
-            }
+            } else { grid.innerHTML = '<p class="text-slate-400">No images in this album.</p>'; }
         }
 
         function closeAlbum() {
@@ -772,8 +1079,6 @@
         }
         
         function shareAlbum() {
-            // Share current URL with album hash or simply copy current page URL if implementing routing
-            // For now, simple alert or clipboard copy of current page
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => alert("Album link copied!"));
         }
@@ -782,28 +1087,19 @@
             navigator.clipboard.writeText(text).then(() => alert("Image link copied!"));
         }
 
-        // --- FORMS ---
         document.getElementById('contact-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button'); btn.innerText = 'Sending...';
-            const { error } = await supabaseClient.from('messages').insert([{ 
-                name: document.getElementById('msg-name').value, 
-                email: document.getElementById('msg-email').value, 
-                message: document.getElementById('msg-message').value 
-            }]);
+            const { error } = await supabaseClient.from('messages').insert([{ name: document.getElementById('msg-name').value, email: document.getElementById('msg-email').value, message: document.getElementById('msg-message').value }]);
             alert(error ? 'Error' : 'Message Sent!');
             if(!error) e.target.reset();
             btn.innerText = 'Send Message';
         });
         
-        // Detailed Membership Form Submit
         document.getElementById('membership-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button'); 
-            const originalText = btn.innerText;
-            btn.innerText = 'Submitting...';
-            btn.disabled = true;
-
+            const btn = e.target.querySelector('button'); const originalText = btn.innerText;
+            btn.innerText = 'Submitting...'; btn.disabled = true;
             const payload = {
                 full_name: document.getElementById('m-fullname').value,
                 name_with_initials: document.getElementById('m-initials').value,
@@ -816,18 +1112,9 @@
                 bio: document.getElementById('m-bio').value,
                 status: 'pending'
             };
-
             const { error } = await supabaseClient.from('members').insert([payload]);
-            
-            if(error) {
-                alert('Error: ' + error.message);
-            } else {
-                alert('Application Sent Successfully!');
-                document.getElementById('join-modal').classList.add('hidden');
-                e.target.reset();
-            }
-            btn.innerText = originalText;
-            btn.disabled = false;
+            if(error) alert('Error: ' + error.message); else { alert('Application Sent Successfully!'); document.getElementById('join-modal').classList.add('hidden'); e.target.reset(); }
+            btn.innerText = originalText; btn.disabled = false;
         });
 
         function googleTranslateElementInit() {
@@ -836,5 +1123,4 @@
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
-
 </html>
