@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Makers Youth & Sport Club</title>
+    <link rel="icon" type="image/png" href="https://dilnuka13.github.io/Dream_Makers/logo.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { 
+                        dark: { bg: '#0f172a', card: '#1e293b', text: '#f1f5f9' },
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6'
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                } 
+            } 
+        }
+    </script>
+
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        
+        /* Glassmorphism Sidebar */
+        .glass-sidebar { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px); 
+            border-right: 1px solid rgba(255, 255, 255, 0.5); 
+        }
+        .dark .glass-sidebar { 
+            background: rgba(15, 23, 42, 0.95); 
+            border-right: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        
+        /* Navigation Active State */
+        .nav-item.active { 
+            background: linear-gradient(to right, #eff6ff, #ffffff); 
+            color: #1e3a8a; 
+            border-right: 3px solid #1e3a8a; 
+        }
+        .dark .nav-item.active { 
+            background: linear-gradient(to right, #1e293b, #0f172a); 
+            color: #60a5fa; 
+            border-right: 3px solid #60a5fa; 
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+        
+        .slide-bg {
+            position: absolute; inset: 0; background-size: cover; background-position: center;
+            opacity: 0; transition: opacity 2s ease-in-out; z-index: 0; filter: blur(1px); transform: scale(1.02);
+        }
+        .slide-bg.active { opacity: 1; }
+
+        /* Hide Scrollbar for clean look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Google Translate Reset */
+        .goog-te-banner-frame.skiptranslate { display: none !important; } 
+        body { top: 0px !important; }
+        .goog-te-gadget-simple { background-color: transparent !important; border: none !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="text-center p-5">
+            <h1 class="text-4xl md:text-6xl font-bold text-blue-900 dark:text-white tracking-tight animate-fade-up">Dream Makers</h1>
+            <p class="text-lg md:text-xl text-slate-500 dark:text-slate-400 mt-2 font-light tracking-widest uppercase">Youth & Sport Club</p>
+            <div class="h-1 bg-blue-600 dark:bg-blue-400 mt-6 mx-auto rounded-full w-24"></div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button onclick="toggleSidebar()" class="lg:hidden fixed top-4 right-4 z-50 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-lg flex items-center justify-center text-blue-900 dark:text-white border border-slate-100 dark:border-slate-700 hover:bg-blue-50 transition">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar-panel" class="glass-sidebar fixed inset-y-0 left-0 w-72 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col h-screen shadow-2xl lg:shadow-none">
+            <div class="p-8 pb-4 flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#151B54] rounded-xl flex items-center justify-center shadow-lg p-2">
+                    <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-800 dark:text-white leading-tight">Dream Makers</h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Dikhengama</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Menu</p>
+                
+                <button onclick="showSection('home')" id="nav-home" class="nav-item active w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-home"></i></span><span>Home</span>
+                </button>
+                
+                <button onclick="showSection('about')" id="nav-about" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-users"></i></span><span>About Us</span>
+                </button>
+                
+                <button onclick="showSection('sports')" id="nav-sports" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-running"></i></span><span>Sports</span>
+                </button>
+                
+                <button onclick="showSection('events')" id="nav-events" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-calendar-alt"></i></span><span>Events</span>
+                </button>
+
+                <!-- New Gallery Tab -->
+                <button onclick="showSection('gallery')" id="nav-gallery" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-images"></i></span><span>Gallery</span>
+                </button>
+                
+                <button onclick="showSection('downloads')" id="nav-downloads" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-download"></i></span><span>Downloads</span>
+                </button>
+                
+                <button onclick="showSection('contact')" id="nav-contact" class="nav-item w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all group">
+                    <span class="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition"><i class="fas fa-envelope"></i></span><span>Contact</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-2 mb-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+                    <span class="flex items-center gap-2"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline text-yellow-400"></i><span>Theme</span></span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 lg:ml-72 p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full relative">
+            <div class="flex items-center gap-3 mb-4 lg:hidden">
+                <button onclick="showSection('home')" class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-500 hover:text-blue-600 hover:scale-105 transition"><i class="fas fa-arrow-left"></i></button>
+            </div>
+
+            <!-- SECTIONS -->
+            
+            <!-- 1. HOME SECTION -->
+            <div id="section-home" class="page-section animate-fade-up">
+                <!-- HERO SECTION WITH SLIDESHOW -->
+                <section class="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-blue-900/10 min-h-[400px] flex items-center p-8 lg:p-16 text-white group">
+                    <div id="hero-slideshow" class="absolute inset-0 z-0 bg-slate-900">
+                        <!-- Slideshow injected via JS -->
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/70 to-blue-900/40 dark:from-slate-950/90 dark:via-slate-900/70 dark:to-slate-900/40 z-10"></div>
+                    
+                    <div class="relative z-20 max-w-2xl">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 font-bold text-xs mb-6 shadow-lg">
+                            <i class="fas fa-crown text-[10px]"></i> <span>Pride of Dikhengama</span>
+                        </div>
+                        <h1 class="text-4xl lg:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                            Future Winning<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">Dream Makers</span>
+                        </h1>
+                        <p class="text-lg text-blue-100 mb-8 font-light leading-relaxed max-w-lg drop-shadow-md">
+                            Empowering youth through sports, discipline, and unity.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-start gap-6">
+                            <button onclick="document.getElementById('join-modal').classList.remove('hidden')" class="px-8 py-3.5 bg-white text-blue-900 rounded-full font-bold shadow-lg hover:bg-blue-50 transition transform hover:-translate-y-1 flex items-center gap-2">
+                                <i class="fas fa-user-plus"></i> <span>Join Now</span>
+                            </button>
+                            
+                            <!-- Home Social Icons -->
+                            <div id="home-social-links" class="flex items-center gap-3">
+                                <!-- Loaded via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Quick Links -->
+                <section id="quick-links-section" class="mt-12 hidden">
+                    <div class="flex items-center gap-2 mb-4 px-2">
+                        <i class="fas fa-link text-blue-600 dark:text-blue-400"></i>
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-white">Quick Links</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="quick-links-container">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Stats -->
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-8">
+                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2" id="home-member-count">0+</div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Members</p>
+                    </div>
+                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2" id="home-event-count">0+</div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projects</p>
+                    </div>
+                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">5+</div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Awards</p>
+                    </div>
+                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">2+</div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Years History</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 2. ABOUT SECTION -->
+            <div id="section-about" class="page-section hidden animate-fade-up">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">About Us</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Our vision, mission and the team.</p>
+                </header>
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4"><i class="fas fa-eye"></i></div>
+                        <h3 class="font-bold text-xl dark:text-white mb-2">Our Vision</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">To be the beacon of hope and empowerment for the youth of Dikhengama, fostering a generation of disciplined, united, and successful individuals.</p>
+                    </div>
+                     <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i class="fas fa-bullseye"></i></div>
+                        <h3 class="font-bold text-xl dark:text-white mb-2">Our Mission</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Creating opportunities through sports, education, and community service to develop leadership skills and social responsibility among our members.</p>
+                    </div>
+                </div>
+                
+                <h3 class="font-bold text-xl dark:text-white mb-4">Executive Committee</h3>
+                <div id="officers-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"></div>
+
+                <!-- Members List -->
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Our Members</h3>
+                    <div class="h-1 w-20 bg-green-600 rounded-full hidden md:block"></div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 uppercase text-xs font-bold">
+                                <tr>
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4 text-center">Age</th>
+                                    <th class="px-6 py-4 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700" id="members-list">
+                                <!-- Loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SPORTS SECTION -->
+            <div id="section-sports" class="page-section hidden animate-fade-up">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Sports Teams</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Our talented teams.</p>
+                </header>
+                <div id="sports-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- 4. EVENTS SECTION -->
+            <div id="section-events" class="page-section hidden animate-fade-up">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Events</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Upcoming and past activities.</p>
+                </header>
+                <div id="events-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- 5. GALLERY SECTION -->
+            <div id="section-gallery" class="page-section hidden animate-fade-up">
+                <header class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Gallery</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Moments from our journey.</p>
+                    </div>
+                </header>
+                
+                <!-- Album View -->
+                <div id="gallery-albums-view">
+                    <div id="albums-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- Albums will load here -->
+                    </div>
+                </div>
+
+                <!-- Single Album Images View -->
+                <div id="gallery-images-view" class="hidden">
+                    <button onclick="closeAlbum()" class="mb-6 flex items-center gap-2 text-slate-500 hover:text-blue-600 transition font-bold text-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Albums
+                    </button>
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h3 id="current-album-title" class="text-2xl font-bold text-slate-800 dark:text-white mb-1">Album Title</h3>
+                            <p id="current-album-date" class="text-xs text-slate-500 dark:text-slate-400 font-mono">Date</p>
+                        </div>
+                        <button onclick="shareAlbum()" class="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 p-2 rounded-lg text-xs font-bold"><i class="fas fa-share-alt mr-1"></i> Share</button>
+                    </div>
+                    
+                    <div id="album-images-grid" class="columns-1 md:columns-3 gap-4 space-y-4">
+                        <!-- Images will load here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. DOWNLOADS SECTION -->
+            <div id="section-downloads" class="page-section hidden animate-fade-up">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Downloads</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Resources and documents.</p>
+                </header>
+                <div id="downloads-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- 7. CONTACT SECTION -->
+            <div id="section-contact" class="page-section hidden animate-fade-up">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Contact Us</h2>
+                </header>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700">
+                        <form id="contact-form" class="space-y-4">
+                            <input type="text" id="msg-name" placeholder="Your Name" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <input type="email" id="msg-email" placeholder="Email" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <textarea id="msg-message" rows="4" placeholder="Message" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 dark:text-white"></textarea>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="space-y-6">
+                         <div class="bg-blue-900 text-white p-8 rounded-[2rem]">
+                            <h3 class="font-bold text-xl mb-4">Info</h3>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt w-6"></i> <span id="contact-address">Loading...</span></p>
+                            <p class="mb-2"><i class="fas fa-phone w-6"></i> <span id="contact-phone">Loading...</span></p>
+                            <p><i class="fas fa-envelope w-6"></i> <span id="contact-email">Loading...</span></p>
+                         </div>
+                         <!-- Social Media Links Section -->
+                         <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+                            <h4 class="font-bold text-slate-800 dark:text-white mb-4">Follow Us</h4>
+                            <div class="flex justify-center gap-4 flex-wrap" id="contact-social-links">
+                                <p class="text-xs text-slate-400">Loading links...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
+                <!-- Footer Side Social Icons -->
+                <div class="flex justify-center gap-4 mb-6" id="footer-social-links">
+                    <!-- Loaded via JS -->
+                </div>
+
+                <div class="flex justify-center items-center gap-4 sm:gap-6 mb-4 flex-wrap px-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Sri_Lanka.svg/1200px-Flag_of_Sri_Lanka.svg.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Western_Province_Flag_%28SRI_LANKA%29.png/330px-Western_Province_Flag_%28SRI_LANKA%29.png" class="h-5 sm:h-6 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300 shadow-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Emblem_of_Sri_Lanka.svg" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
+                    <img src="https://dilnuka13.github.io/Dream_Makers/1750483906074.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
+                    <img src="https://dilnuka13.github.io/Dream_Makers/119.png" class="h-8 sm:h-10 w-auto object-contain opacity-80 hover:opacity-100 hover:scale-110 transition duration-300">
+                </div>
+                <p class="text-slate-500 text-sm pb-4">
+                    &copy; 2025 Dream Makers Youth & Sport Club. Developed by <a href="https://dilnuka13.github.io/my/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline font-bold">Isara Dilnuka</a>.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Join Modal (Detailed Form) -->
+    <div id="join-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-lg p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="document.getElementById('join-modal').classList.add('hidden')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:text-red-500 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 text-center">Join Dream Makers</h3>
+            <form id="membership-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="m-fullname" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Full Name" required>
+                    <input type="text" id="m-initials" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Name with Initials" required>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs text-slate-400 pl-2">Date of Birth</label>
+                        <input type="date" id="m-dob" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
+                    </div>
+                    <div>
+                         <label class="text-xs text-slate-400 pl-2">NIC Number</label>
+                        <input type="text" id="m-nic" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="NIC" required>
+                    </div>
+                </div>
+                <input type="text" id="m-address" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Address" required>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="tel" id="m-phone" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Phone Number" required>
+                    <input type="tel" id="m-whatsapp" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="WhatsApp Number">
+                </div>
+                <input type="email" id="m-email" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Email Address">
+                <textarea id="m-bio" rows="3" class="w-full p-3 rounded-xl border dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Special Skills / Bio"></textarea>
+                <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg shadow-blue-900/20">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Translator -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <div id="google_translate_element"></div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800 });
+        
+        // --- SETUP ---
+        const supabaseUrl = 'https://yzlgnavevrvikaolxorg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bGduYXZldnJ2aWthb2x4b3JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzNjQyODEsImV4cCI6MjA4MTk0MDI4MX0.17BpZteoYnIYZsCs1f90VGMYnmYW6AHeXO4-1yYB7Ts';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- UI LOGIC ---
+        function toggleSidebar() { document.getElementById('sidebar-panel').classList.toggle('-translate-x-full'); }
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+        function showSection(id) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`section-${id}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`nav-${id}`).classList.add('active');
+            
+            // Close mobile menu if open
+            if(window.innerWidth < 1024) document.getElementById('sidebar-panel').classList.add('-translate-x-full');
+            
+            // Load Data specifics
+            if(id === 'gallery') fetchAlbums();
+        }
+
+        window.addEventListener('load', () => { 
+            setTimeout(() => { 
+                document.getElementById('preloader').classList.add('opacity-0', 'pointer-events-none'); 
+                document.body.classList.remove('overflow-hidden'); 
+            }, 1500);
+            fetchHomeData();
+            fetchOfficers();
+            fetchMembers(); // Load Members
+            fetchSports();
+            fetchEvents();
+            fetchDownloads();
+            fetchContact();
+        });
+
+        // --- DATA FETCHING ---
+        
+        async function fetchHomeData() {
+            // Slideshow
+            const { data: slides } = await supabaseClient.from('slideshow_images').select('*').order('display_order');
+            const hero = document.getElementById('hero-slideshow');
+            if(slides && slides.length > 0) {
+                hero.innerHTML = '';
+                slides.forEach((s, i) => {
+                    const div = document.createElement('div');
+                    div.className = `slide-bg ${i===0?'active':''}`;
+                    div.style.backgroundImage = `url('${s.image_url}')`;
+                    hero.appendChild(div);
+                });
+                let idx = 0;
+                setInterval(() => {
+                    hero.children[idx].classList.remove('active');
+                    idx = (idx + 1) % slides.length;
+                    hero.children[idx].classList.add('active');
+                }, 5000);
+            }
+
+            // Stats
+            const { count: mCount } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            document.getElementById('home-member-count').innerText = mCount || '0+';
+            const { count: eCount } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
+            document.getElementById('home-event-count').innerText = eCount || '0+';
+            
+            // Quick Links
+            const { data: qLinks } = await supabaseClient.from('quick_links').select('*').eq('is_active', true).order('display_order');
+            const qContainer = document.getElementById('quick-links-container');
+            const qSection = document.getElementById('quick-links-section');
+            
+            if (qLinks && qLinks.length > 0) {
+                qContainer.innerHTML = '';
+                qLinks.forEach(link => {
+                    qContainer.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all group flex flex-col justify-between h-full">
+                        <div><h4 class="font-bold text-slate-800 dark:text-white text-lg mb-2">${link.title}</h4><p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">${link.description || ''}</p></div>
+                        <a href="${link.link_url}" target="_blank" class="inline-flex items-center justify-center w-full py-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl text-sm font-bold group-hover:bg-blue-600 group-hover:text-white dark:group-hover:bg-blue-500 transition-colors">View More <i class="fas fa-arrow-right ml-2 text-xs"></i></a>
+                    </div>`;
+                });
+                qSection.classList.remove('hidden');
+            } else { qSection.classList.add('hidden'); }
+        }
+
+        async function fetchOfficers() {
+            const { data } = await supabaseClient.from('officers').select('*').order('display_order');
+            const grid = document.getElementById('officers-grid');
+            if(data) {
+                grid.innerHTML = '';
+                data.forEach(o => {
+                    // Privacy Check
+                    const showEmail = o.show_email ? `<p class="text-xs text-slate-500 mt-1">${o.email}</p>` : '';
+                    const showPhone = o.show_phone ? `<p class="text-xs text-slate-500 mt-1">${o.phone}</p>` : '';
+                    
+                    grid.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 text-center hover:shadow-lg transition">
+                        <img src="${o.image_url || 'https://via.placeholder.com/150'}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-blue-50 dark:border-slate-700">
+                        <h4 class="font-bold text-slate-800 dark:text-white">${o.name}</h4>
+                        <p class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-2">${o.position}</p>
+                        ${showEmail}
+                        ${showPhone}
+                    </div>`;
+                });
+            }
+        }
+        
+        // Function to calculate age
+        function calculateAge(dateString) {
+            if (!dateString) return 'N/A';
+            const today = new Date();
+            const birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+            return age;
+        }
+
+        async function fetchMembers() {
+            const { data: members, error } = await supabaseClient
+                .from('members')
+                .select('*')
+                .eq('status', 'active')
+                .order('full_name');
+
+            const container = document.getElementById('members-list');
+            
+            if (members && members.length > 0) {
+                container.innerHTML = '';
+                members.forEach(member => {
+                    const age = calculateAge(member.dob);
+                    const name = member.name_with_initials || member.full_name;
+                    
+                    const row = `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                        <td class="px-6 py-4 font-medium text-slate-700 dark:text-slate-200">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xs font-bold">
+                                    ${name.charAt(0).toUpperCase()}
+                                </div>
+                                ${name}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400">${age}</td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                Active
+                            </span>
+                        </td>
+                    </tr>`;
+                    container.innerHTML += row;
+                });
+            } else {
+                container.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-400 italic">No active members yet.</td></tr>';
+            }
+        }
+
+        async function fetchSports() {
+            const { data } = await supabaseClient.from('sports_teams').select('*');
+            const list = document.getElementById('sports-list');
+            if(data) {
+                list.innerHTML = '';
+                data.forEach(s => {
+                    const pageLink = `${s.sport_name.replace(/\s+/g, '_').toLowerCase()}.html`;
+                    
+                    list.innerHTML += `
+                    <div class="group relative flex items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-lg transition overflow-hidden">
+                        
+                        <!-- Hover Popup Content -->
+                        <div class="absolute inset-0 bg-blue-900/90 flex flex-col items-center justify-center text-white p-6 opacity-0 group-hover:opacity-100 transition duration-300 z-10 text-center">
+                            <h4 class="font-bold text-xl mb-1">${s.sport_name}</h4>
+                            <p class="text-sm mb-2">Captain: ${s.captain_name || 'TBA'}</p>
+                            <p class="text-xs opacity-80 line-clamp-3 mb-4">${s.description || 'No description available.'}</p>
+                            <a href="${pageLink}" class="bg-white text-blue-900 px-4 py-2 rounded-full text-xs font-bold hover:bg-blue-50 transition">View Details</a>
+                        </div>
+
+                        <div class="w-20 h-20 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-3xl overflow-hidden shrink-0">
+                            ${s.team_photo_url ? `<img src="${s.team_photo_url}" class="w-full h-full object-cover">` : `<i class="fas fa-trophy text-blue-500"></i>`}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-white">${s.sport_name}</h4>
+                            <p class="text-xs text-slate-500 mb-2">Capt: ${s.captain_name || 'N/A'}</p>
+                            <a href="${pageLink}" class="text-xs font-bold text-blue-600 hover:underline">View Page <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>`;
+                });
+            }
+        }
+
+        async function fetchEvents() {
+            const { data } = await supabaseClient.from('events').select('*').order('event_date', { ascending: false });
+            const list = document.getElementById('events-list');
+            if(data) {
+                list.innerHTML = '';
+                data.forEach(e => {
+                    const date = new Date(e.event_date);
+                    const month = date.toLocaleString('default', { month: 'short' });
+                    const day = date.getDate();
+                    list.innerHTML += `
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-700 group hover:shadow-xl transition">
+                        <div class="h-48 bg-slate-200 relative">
+                            <img src="${e.cover_image_url || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x200?text=Event'">
+                            <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 rounded-xl px-3 py-2 text-center shadow">
+                                <span class="block text-xs font-bold text-slate-500 uppercase">${month}</span>
+                                <span class="block text-xl font-extrabold text-blue-900 dark:text-white">${day}</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-2 line-clamp-1">${e.title}</h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${e.description || ''}</p>
+                        </div>
+                    </div>`;
+                });
+            }
+        }
+
+        async function fetchDownloads() {
+            const { data } = await supabaseClient.from('downloads').select('*');
+            const list = document.getElementById('downloads-list');
+            if(data) {
+                list.innerHTML = '';
+                data.forEach(d => {
+                    // Restore Icon Logic
+                    let icon = 'fa-file-alt text-blue-500';
+                    if(d.file_name.toLowerCase().includes('pdf')) icon = 'fa-file-pdf text-red-500';
+                    else if(d.file_name.toLowerCase().includes('image') || d.file_name.toLowerCase().includes('jpg')) icon = 'fa-file-image text-purple-500';
+                    
+                    list.innerHTML += `
+                    <a href="${d.file_url}" target="_blank" class="flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-blue-500 transition group">
+                        <div class="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-xl ${icon} group-hover:scale-110 transition"><i class="fas ${icon.split(' ')[0]}"></i></div>
+                        <div class="flex-1">
+                            <h5 class="font-bold text-sm text-slate-800 dark:text-white line-clamp-1">${d.file_name}</h5>
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider">${d.category || 'File'}</span>
+                        </div>
+                        <i class="fas fa-download text-slate-300 group-hover:text-blue-500"></i>
+                    </a>`;
+                });
+            }
+        }
+
+        async function fetchContact() {
+            const { data } = await supabaseClient.from('site_settings').select('*').limit(1).maybeSingle();
+            if(data) {
+                if(data.address) document.getElementById('contact-address').innerText = data.address;
+                if(data.contact_number) document.getElementById('contact-phone').innerText = data.contact_number;
+                if(data.email) document.getElementById('contact-email').innerText = data.email;
+
+                // Populate Social Links
+                const locations = [
+                    { id: 'contact-social-links', class: 'w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl hover:scale-110 transition' },
+                    { id: 'home-social-links', class: 'w-10 h-10 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-blue-900 transition' },
+                    { id: 'footer-social-links', class: 'w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 transition text-sm' }
+                ];
+
+                const links = [
+                    { url: data.facebook_url, icon: 'facebook-f', color: 'text-blue-600' },
+                    { url: data.youtube_url, icon: 'youtube', color: 'text-red-600' },
+                    { url: data.instagram_url, icon: 'instagram', color: 'text-pink-600' },
+                    { url: data.whatsapp_url, icon: 'whatsapp', color: 'text-green-500' },
+                    { url: data.telegram_url, icon: 'telegram', color: 'text-blue-400' }
+                ];
+                
+                let hasLinks = false;
+                
+                locations.forEach(loc => {
+                    const el = document.getElementById(loc.id);
+                    if(el) {
+                        el.innerHTML = '';
+                        links.forEach(l => {
+                            if(l.url) {
+                                hasLinks = true;
+                                const colorClass = (loc.id === 'contact-social-links') ? l.color : ''; 
+                                el.innerHTML += `<a href="${l.url}" target="_blank" class="${loc.class} ${colorClass}"><i class="fab fa-${l.icon}"></i></a>`;
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // --- GALLERY LOGIC (NEW) ---
+        async function fetchAlbums() {
+            const { data: albums } = await supabaseClient.from('gallery_albums').select('*').eq('is_hidden', false).order('event_date', { ascending: false });
+            const grid = document.getElementById('albums-grid');
+            if(albums && albums.length > 0) {
+                grid.innerHTML = '';
+                albums.forEach(album => {
+                    grid.innerHTML += `
+                    <div onclick="openAlbum(${album.id}, '${album.title}', '${album.event_date}')" class="cursor-pointer group">
+                        <div class="aspect-square rounded-3xl overflow-hidden mb-3 relative">
+                            <img src="${album.cover_image_url}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+                        </div>
+                        <h4 class="font-bold text-slate-800 dark:text-white group-hover:text-blue-600 transition">${album.title}</h4>
+                        <p class="text-xs text-slate-500">${new Date(album.event_date).toLocaleDateString()}</p>
+                    </div>`;
+                });
+            } else {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No albums found.</p>';
+            }
+        }
+
+        let currentAlbumId = null;
+
+        async function openAlbum(id, title, date) {
+            currentAlbumId = id;
+            document.getElementById('gallery-albums-view').classList.add('hidden');
+            document.getElementById('gallery-images-view').classList.remove('hidden');
+            document.getElementById('current-album-title').innerText = title;
+            document.getElementById('current-album-date').innerText = new Date(date).toDateString();
+            
+            const grid = document.getElementById('album-images-grid');
+            grid.innerHTML = '<p class="text-center w-full">Loading...</p>';
+            
+            const { data: images } = await supabaseClient.from('gallery_images').select('*').eq('album_id', id).eq('is_hidden', false);
+            
+            grid.innerHTML = '';
+            if(images && images.length > 0) {
+                images.forEach(img => {
+                    grid.innerHTML += `
+                    <div class="break-inside-avoid mb-4 rounded-2xl overflow-hidden hover:opacity-90 transition relative group">
+                        <img src="${img.image_url}" class="w-full h-auto" loading="lazy">
+                        ${img.caption ? `<p class="text-xs text-center p-2 bg-slate-50 dark:bg-slate-800">${img.caption}</p>` : ''}
+                        
+                        <!-- Overlay Buttons -->
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
+                            <a href="${img.image_url}" download target="_blank" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:text-blue-600 hover:scale-110 transition" title="Download"><i class="fas fa-download"></i></a>
+                            <button onclick="copyToClipboard('${img.image_url}')" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-800 hover:text-green-600 hover:scale-110 transition" title="Copy Link"><i class="fas fa-link"></i></button>
+                        </div>
+                    </div>`;
+                });
+            } else {
+                grid.innerHTML = '<p class="text-slate-400">No images in this album.</p>';
+            }
+        }
+
+        function closeAlbum() {
+            document.getElementById('gallery-images-view').classList.add('hidden');
+            document.getElementById('gallery-albums-view').classList.remove('hidden');
+        }
+        
+        function shareAlbum() {
+            // Share current URL with album hash or simply copy current page URL if implementing routing
+            // For now, simple alert or clipboard copy of current page
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => alert("Album link copied!"));
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert("Image link copied!"));
+        }
+
+        // --- FORMS ---
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); btn.innerText = 'Sending...';
+            const { error } = await supabaseClient.from('messages').insert([{ 
+                name: document.getElementById('msg-name').value, 
+                email: document.getElementById('msg-email').value, 
+                message: document.getElementById('msg-message').value 
+            }]);
+            alert(error ? 'Error' : 'Message Sent!');
+            if(!error) e.target.reset();
+            btn.innerText = 'Send Message';
+        });
+        
+        // Detailed Membership Form Submit
+        document.getElementById('membership-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); 
+            const originalText = btn.innerText;
+            btn.innerText = 'Submitting...';
+            btn.disabled = true;
+
+            const payload = {
+                full_name: document.getElementById('m-fullname').value,
+                name_with_initials: document.getElementById('m-initials').value,
+                dob: document.getElementById('m-dob').value,
+                nic: document.getElementById('m-nic').value,
+                address: document.getElementById('m-address').value,
+                phone: document.getElementById('m-phone').value,
+                whatsapp: document.getElementById('m-whatsapp').value,
+                email: document.getElementById('m-email').value,
+                bio: document.getElementById('m-bio').value,
+                status: 'pending'
+            };
+
+            const { error } = await supabaseClient.from('members').insert([payload]);
+            
+            if(error) {
+                alert('Error: ' + error.message);
+            } else {
+                alert('Application Sent Successfully!');
+                document.getElementById('join-modal').classList.add('hidden');
+                e.target.reset();
+            }
+            btn.innerText = originalText;
+            btn.disabled = false;
+        });
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,si,ta', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
