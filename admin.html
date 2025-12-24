@@ -18,12 +18,48 @@
                         primary: '#1e3a8a'
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out'
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'slide-down': 'slideDown 0.4s ease-out',
+                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-in': 'bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                        'shimmer': 'shimmer 2s infinite',
+                        'scale-in': 'scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                        'float': 'float 3s ease-in-out infinite'
                     },
                     keyframes: {
                         fadeIn: {
                             '0%': { opacity: '0', transform: 'translateY(10px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '1', 'box-shadow': '0 0 0 0 rgba(37, 99, 235, 0.7)' },
+                            '50%': { 'box-shadow': '0 0 0 10px rgba(37, 99, 235, 0)' },
+                        },
+                        bounceIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.3)' },
+                            '50%': { opacity: '1', transform: 'scale(1.05)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 } 
@@ -53,55 +89,230 @@
         
         #loading-overlay { display: none; }
         #loading-overlay.active { display: flex; }
+        
+        /* Glass morphism styles for modern look */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Button interaction effects */
+        .btn-interactive {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-interactive:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-interactive:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Card elevation and depth */
+        .card-elevated {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .card-elevated:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 30px 60px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+        
+        /* Smooth input focus states */
+        input:focus, textarea:focus, select:focus {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+        }
+        
+        /* Enhanced table row interactions */
+        .table-row-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .table-row-hover:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+            transform: scale(1.01);
+        }
+        
+        /* Modal backdrop animation */
+        .modal-backdrop {
+            animation: backdropFade 0.3s ease;
+        }
+        
+        @keyframes backdropFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Loading spinner enhancement */
+        .spinner-modern {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .spinner-modern::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #2563eb;
+            border-right-color: #2563eb;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tab transition smooth */
+        .tab-transition {
+            animation: slideUpTab 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideUpTab {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 h-screen overflow-hidden flex transition-colors duration-300">
 
     <!-- LOADING OVERLAY -->
-    <div id="loading-overlay" class="fixed inset-0 z-[100] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md items-center justify-center flex-col text-center">
+    <div id="loading-overlay" class="fixed inset-0 z-[100] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md items-center justify-center flex-col text-center modal-backdrop">
         <div class="relative">
-            <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4 mx-auto"></div>
+            <!-- Enhanced loading spinner with modern design -->
+            <div class="spinner-modern mb-4 mx-auto"></div>
         </div>
         <h2 class="text-xl font-bold text-blue-900 dark:text-white uppercase tracking-widest animate-pulse">Processing...</h2>
         <p id="loading-text" class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Please wait</p>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 w-full max-w-md shadow-2xl relative overflow-hidden animate-fade-in">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-purple-600"></div>
-            <div class="text-center mb-8 mt-4">
-                <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-1">Welcome Back!</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Please sign in to continue</p>
-            </div>
+    <!-- NEW MODERN LOGIN SCREEN -->
+    <div id="login-screen" class="fixed inset-0 z-50 bg-[#0f172a] flex items-center justify-center p-4 overflow-hidden font-['Poppins']">
+        <!-- Modern Background Effects -->
+        <div class="absolute inset-0 w-full h-full">
+            <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s"></div>
+            <div class="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-cyan-500/20 rounded-full blur-[100px] animate-float"></div>
+        </div>
+
+        <!-- Login Card -->
+        <div class="relative z-10 w-full max-w-5xl h-auto min-h-[600px] bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/10 flex flex-col md:flex-row overflow-hidden animate-scale-in">
             
-            <form id="login-form" class="space-y-5">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Email Address</label>
-                    <input type="email" id="login-email" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-blue-500 outline-none transition" placeholder="Enter your email">
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Password</label>
-                        <a href="#" onclick="forgotPassword()" class="text-xs text-blue-600 hover:underline">Forgot Password?</a>
+            <!-- Left Side: Visual/Branding (Hidden on mobile) -->
+            <div class="hidden md:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-800 relative items-center justify-center p-12 text-white overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent"></div>
+                
+                <div class="relative z-10 text-center space-y-6">
+                    <div class="w-24 h-24 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto shadow-lg border border-white/30 mb-6 transform hover:scale-110 transition-transform duration-500">
+                        <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-16 h-16 object-contain drop-shadow-md">
                     </div>
-                    <input type="password" id="login-password" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-blue-500 outline-none transition" placeholder="••••••••">
+                    <div>
+                        <h1 class="text-4xl font-bold tracking-tight mb-2">Dream Makers</h1>
+                        <p class="text-blue-100 text-lg font-light tracking-wide">Admin Portal</p>
+                    </div>
+                    <p class="text-sm text-white/60 max-w-xs mx-auto leading-relaxed">
+                        Manage your organization with elegance and efficiency. Welcome back, Administrator.
+                    </p>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-blue-900 to-blue-700 text-white py-3 rounded-xl font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-200">Sign In</button>
-            </form>
-
-            <div class="flex items-center gap-4 my-6">
-                <div class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
-                <span class="text-xs text-slate-400 font-bold uppercase">Or</span>
-                <div class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
+                
+                <!-- Decor Circles -->
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-2xl animate-float"></div>
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/20 rounded-full blur-2xl animate-pulse"></div>
             </div>
 
-            <button id="google-login-btn" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white py-3 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-600 transition flex items-center justify-center gap-3">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
-                <span>Super Admin Login (Google)</span>
-            </button>
+            <!-- Right Side: Form -->
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white dark:bg-slate-900 relative">
+                <!-- Mobile Logo (Visible only on mobile) -->
+                <div class="md:hidden flex flex-col items-center mb-6">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mb-2 shadow-lg">
+                        <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-10 h-10 object-contain">
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800 dark:text-white">Dream Makers</h2>
+                </div>
 
-            <p id="login-error" class="text-red-500 text-xs text-center mt-4 hidden bg-red-50 dark:bg-red-900/20 p-2 rounded-lg"></p>
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white mb-2">Hello Again! 👋</h2>
+                    <p class="text-slate-500 dark:text-slate-400">Please enter your credentials to continue.</p>
+                </div>
+
+                <form id="login-form" class="space-y-5">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Email</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                            </div>
+                            <input type="email" id="login-email" class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300" placeholder="admin@dreammakers.com">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center ml-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Password</label>
+                            <a href="#" onclick="forgotPassword()" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">Forgot Password?</a>
+                        </div>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                            </div>
+                            <input type="password" id="login-password" class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group active:scale-95">
+                        <span>Sign In</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </form>
+
+                <div class="mt-8">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white dark:bg-slate-900 text-slate-500">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <button id="google-login-btn" class="mt-6 w-full py-3 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 active:scale-95">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
+                        <span>Super Admin Access</span>
+                    </button>
+                </div>
+
+                <p id="login-error" class="text-red-500 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-xs text-center mt-6 p-3 rounded-lg hidden animate-pulse">
+                    <i class="fas fa-exclamation-circle mr-1"></i> Invalid credentials
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer Credit -->
+        <div class="absolute bottom-4 text-center w-full">
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] opacity-50">System by Dream Makers</p>
         </div>
     </div>
 
@@ -109,71 +320,74 @@
     <div id="app-container" class="flex w-full h-full hidden">
         
         <!-- SIDEBAR -->
-        <aside class="w-64 bg-slate-900 dark:bg-slate-950 text-slate-300 flex flex-col shadow-xl z-20 sidebar-transition flex-shrink-0">
-            <div class="p-6 border-b border-slate-800 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">DM</div>
+        <aside class="w-64 bg-gradient-to-b from-slate-900 to-slate-950 dark:from-slate-950 dark:to-slate-999 text-slate-300 flex flex-col shadow-2xl z-20 sidebar-transition flex-shrink-0">
+            <!-- Enhanced sidebar header with improved branding -->
+            <div class="p-6 border-b border-slate-800 flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-blue-500/50 group-hover:scale-110 transition-all duration-300">DM</div>
                 <div>
-                    <span class="block font-bold text-white tracking-wide">Admin Portal</span>
+                    <span class="block font-bold text-white tracking-wide group-hover:text-blue-400 transition">Admin Portal</span>
                     <span class="text-[10px] text-slate-500 uppercase tracking-wider">Dream Makers</span>
                 </div>
             </div>
             
-            <nav class="flex-1 overflow-y-auto py-4 space-y-1 px-3 custom-scrollbar">
-                <button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-chart-pie w-5 text-center"></i> Dashboard
+            <nav class="flex-1 overflow-y-auto py-4 space-y-2 px-3 custom-scrollbar">
+                <button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-chart-pie w-5 text-center group-hover:scale-110 transition-transform"></i>
+                    <span>Dashboard</span>
                 </button>
                 
                 <!-- Super Admin Only Section -->
                 <div id="super-admin-menu" class="hidden">
-                    <p class="px-4 mt-6 mb-2 text-[10px] font-bold uppercase text-yellow-500 tracking-wider">Super Access</p>
-                    <button onclick="switchTab('admins')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left text-yellow-100">
-                        <i class="fas fa-user-shield w-5 text-center"></i> Manage Admins
+                    <p class="px-4 mt-6 mb-2 text-[10px] font-bold uppercase text-yellow-400 tracking-wider">Super Access</p>
+                    <button onclick="switchTab('admins')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                        <i class="fas fa-user-shield w-5 text-center text-yellow-400 group-hover:scale-110 transition-transform"></i>
+                        <span>Manage Admins</span>
                     </button>
                 </div>
 
                 <p class="px-4 mt-6 mb-2 text-[10px] font-bold uppercase text-slate-500 tracking-wider">Content</p>
-                <button onclick="switchTab('members')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-users w-5 text-center"></i> Members
+                <button onclick="switchTab('members')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-users w-5 text-center group-hover:scale-110 transition-transform"></i> Members
                 </button>
-                <button onclick="switchTab('messages')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-envelope w-5 text-center"></i> Messages
+                <button onclick="switchTab('messages')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-envelope w-5 text-center group-hover:scale-110 transition-transform"></i> Messages
                 </button>
-                <button onclick="switchTab('events')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-calendar-alt w-5 text-center"></i> Events
+                <button onclick="switchTab('events')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-calendar-alt w-5 text-center group-hover:scale-110 transition-transform"></i> Events
                 </button>
-                <button onclick="switchTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-images w-5 text-center"></i> Gallery
+                <button onclick="switchTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-images w-5 text-center group-hover:scale-110 transition-transform"></i> Gallery
                 </button>
-                <button onclick="switchTab('slideshow')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-photo-video w-5 text-center"></i> Hero Slideshow
+                <button onclick="switchTab('slideshow')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-photo-video w-5 text-center group-hover:scale-110 transition-transform"></i> Hero Slideshow
                 </button>
-                <button onclick="switchTab('downloads')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-download w-5 text-center"></i> Downloads
+                <button onclick="switchTab('downloads')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-download w-5 text-center group-hover:scale-110 transition-transform"></i> Downloads
                 </button>
-                <button onclick="switchTab('quicklinks')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-link w-5 text-center"></i> Quick Links
+                <button onclick="switchTab('quicklinks')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-link w-5 text-center group-hover:scale-110 transition-transform"></i> Quick Links
                 </button>
                 
                 <p class="px-4 mt-6 mb-2 text-[10px] font-bold uppercase text-slate-500 tracking-wider">Organization</p>
-                <button onclick="switchTab('officers')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-user-tie w-5 text-center"></i> Officers
+                <button onclick="switchTab('officers')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-user-tie w-5 text-center group-hover:scale-110 transition-transform"></i> Officers
                 </button>
-                <button onclick="switchTab('sports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-running w-5 text-center"></i> Sports Teams
+                <button onclick="switchTab('sports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-running w-5 text-center group-hover:scale-110 transition-transform"></i> Sports Teams
                 </button>
                 
                 <p class="px-4 mt-6 mb-2 text-[10px] font-bold uppercase text-slate-500 tracking-wider">System</p>
-                <button onclick="switchTab('settings')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition text-left">
-                    <i class="fas fa-cog w-5 text-center"></i> Settings
+                <button onclick="switchTab('settings')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all duration-300 text-left group">
+                    <i class="fas fa-cog w-5 text-center group-hover:scale-110 transition-transform"></i> Settings
                 </button>
             </nav>
 
             <div class="p-4 border-t border-slate-800 space-y-2">
-                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium bg-slate-800 hover:bg-slate-700 transition">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium bg-slate-800/50 hover:bg-slate-700 transition-all duration-300 btn-interactive">
                     <span class="flex items-center gap-2"><i class="fas fa-moon"></i> Theme</span>
                     <span id="theme-status" class="text-xs bg-slate-900 px-2 py-0.5 rounded text-slate-400">Dark</span>
                 </button>
-                <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-slate-800 transition">
+                <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/20 transition-all duration-300 btn-interactive">
                     <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
                 </button>
             </div>
@@ -182,10 +396,13 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 bg-slate-50 dark:bg-slate-900 overflow-y-auto relative h-full transition-colors duration-300">
             <!-- Header -->
-            <header class="bg-white dark:bg-slate-800 sticky top-0 z-10 px-8 py-4 flex items-center justify-between shadow-sm border-b border-slate-200 dark:border-slate-700">
+            <header class="bg-white dark:bg-slate-800 sticky top-0 z-10 px-8 py-4 flex items-center justify-between shadow-md border-b border-slate-200 dark:border-slate-700 transition-shadow duration-300">
                 <div class="flex items-center gap-4">
-                    <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-10 h-10 object-contain">
-                    <h1 id="page-title" class="text-xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+                    <img src="https://dilnuka13.github.io/Dream_Makers/logo.png" class="w-10 h-10 object-contain hover:scale-110 transition-transform">
+                    <div>
+                        <h1 id="page-title" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Dashboard</h1>
+                        <p class="text-xs text-slate-500">Admin Management System</p>
+                    </div>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -193,7 +410,7 @@
                         <span id="admin-name" class="block text-sm font-bold text-slate-800 dark:text-white">Admin</span>
                         <span id="admin-role" class="block text-xs text-slate-500 dark:text-slate-400 uppercase">Role</span>
                     </div>
-                    <div class="w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-600 shadow-sm overflow-hidden bg-slate-100">
+                    <div class="w-12 h-12 rounded-full border-2 border-blue-400 shadow-lg overflow-hidden bg-slate-100 hover:scale-110 transition-transform cursor-pointer">
                         <img id="user-avatar" src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -202,68 +419,78 @@
             <div class="p-8 max-w-7xl mx-auto space-y-8 pb-20">
                 
                 <!-- 1. DASHBOARD TAB -->
-                <div id="tab-dashboard" class="tab-content block space-y-8 animate-fade-in">
-                    <div class="flex justify-end">
-                        <button onclick="initDashboard()" class="text-blue-600 hover:text-blue-800 text-sm font-bold bg-blue-50 dark:bg-slate-800 px-4 py-2 rounded-lg transition"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
+                <div id="tab-dashboard" class="tab-content block space-y-8 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Dashboard Overview</h2>
+                            <p class="text-sm text-slate-500">Real-time statistics and analytics</p>
+                        </div>
+                        <button onclick="initDashboard()" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 text-sm font-bold bg-blue-50 dark:bg-slate-800 px-4 py-2 rounded-xl transition-all duration-300 btn-interactive hover:bg-blue-100"><i class="fas fa-sync-alt mr-2"></i> Refresh</button>
                     </div>
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group">
                             <div class="flex justify-between items-start mb-4">
-                                <div><p class="text-xs font-bold text-slate-400 uppercase">Total Members</p><h3 class="text-2xl font-bold text-slate-800 dark:text-white" id="dash-total-members">0</h3></div>
-                                <div class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center"><i class="fas fa-users"></i></div>
+                                <div><p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Total Members</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2 group-hover:text-blue-600 transition" id="dash-total-members">0</h3></div>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-900/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fas fa-users"></i></div>
                             </div>
+                            <div class="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group">
                             <div class="flex justify-between items-start mb-4">
-                                <div><p class="text-xs font-bold text-slate-400 uppercase">Pending Req.</p><h3 class="text-2xl font-bold text-orange-600 dark:text-orange-400" id="dash-pending-members">0</h3></div>
-                                <div class="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center"><i class="fas fa-user-clock"></i></div>
+                                <div><p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Pending Req.</p><h3 class="text-3xl font-bold text-orange-600 dark:text-orange-400 mt-2 group-hover:text-orange-700 transition" id="dash-pending-members">0</h3></div>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-900/10 text-orange-600 dark:text-orange-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fas fa-hourglass-end"></i></div>
                             </div>
+                            <div class="h-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full"></div>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group">
                             <div class="flex justify-between items-start mb-4">
-                                <div><p class="text-xs font-bold text-slate-400 uppercase">Events</p><h3 class="text-2xl font-bold text-slate-800 dark:text-white" id="dash-total-events">0</h3></div>
-                                <div class="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center"><i class="fas fa-calendar-check"></i></div>
+                                <div><p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Events</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2 group-hover:text-purple-600 transition" id="dash-total-events">0</h3></div>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-900/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fas fa-calendar-check"></i></div>
                             </div>
+                            <div class="h-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full"></div>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group">
                             <div class="flex justify-between items-start mb-4">
-                                <div><p class="text-xs font-bold text-slate-400 uppercase">Messages</p><h3 class="text-2xl font-bold text-slate-800 dark:text-white" id="dash-total-msgs">0</h3></div>
-                                <div class="w-10 h-10 rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center"><i class="fas fa-envelope"></i></div>
+                                <div><p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Messages</p><h3 class="text-3xl font-bold text-slate-800 dark:text-white mt-2 group-hover:text-green-600 transition" id="dash-total-msgs">0</h3></div>
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-900/10 text-green-600 dark:text-green-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fas fa-envelope"></i></div>
                             </div>
+                            <div class="h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
                         </div>
                     </div>
 
                     <!-- Charts -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                            <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-4">Member Growth</h3>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
+                            <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 mb-4">Member Growth</h3>
                             <canvas id="memberChart"></canvas>
                         </div>
-                         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                            <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-4">Activity Overview</h3>
+                         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
+                            <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 mb-4">Activity Overview</h3>
                             <canvas id="activityChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. ADMINS TAB -->
-                <div id="tab-admins" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-white">Admin Management</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Manage Sub-Admins</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <div class="relative">
-                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterAdmins(this.value)" placeholder="Search Admins..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                <div id="tab-admins" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
+                        <div class="flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Admin Management</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Control & manage sub-admins</p>
                             </div>
-                            <button onclick="loadAdmins()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('admin-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg"><i class="fas fa-user-plus mr-2"></i> Create</button>
+                            <div class="flex gap-2 flex-wrap w-full lg:w-auto">
+                                <div class="relative flex-1 lg:flex-none">
+                                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input type="text" onkeyup="filterAdmins(this.value)" placeholder="Search Admins..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-full lg:w-64 transition-all">
+                                </div>
+                                <button onclick="loadAdmins()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                                <button onclick="openModal('admin-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg btn-interactive"><i class="fas fa-user-plus mr-2"></i> Create</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm custom-table text-slate-600 dark:text-slate-300">
                                 <thead class="bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Last Login</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Actions</th></tr></thead>
@@ -274,25 +501,25 @@
                 </div>
 
                 <!-- 3. MEMBERS TAB -->
-                <div id="tab-members" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-                        <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col lg:flex-row justify-between gap-4 items-center">
-                            <div class="flex items-center gap-2 w-full lg:w-auto">
+                <div id="tab-members" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center">
+                            <div class="flex items-center gap-3">
                                 <h3 class="font-bold text-lg text-slate-800 dark:text-white">Member Management</h3>
-                                <button onclick="loadMembers()" class="text-slate-400 hover:text-blue-600 ml-2"><i class="fas fa-sync-alt"></i></button>
+                                <button onclick="loadMembers()" class="text-slate-400 hover:text-blue-600 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
                             </div>
-                            <div class="flex gap-2 flex-wrap w-full lg:w-auto justify-end">
-                                <div class="relative w-full sm:w-auto">
+                            <div class="flex gap-2 flex-wrap w-full lg:w-auto">
+                                <div class="relative flex-1 lg:flex-none">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                    <input type="text" onkeyup="filterMembers(this.value)" placeholder="Search Name/NIC/Phone..." class="w-full sm:w-64 pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                    <input type="text" onkeyup="filterMembers(this.value)" placeholder="Search Name/NIC/Phone..." class="w-full lg:w-64 pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                                 </div>
-                                <select onchange="filterMembersByStatus(this.value)" class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm outline-none">
+                                <select onchange="filterMembersByStatus(this.value)" class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm outline-none transition-all">
                                     <option value="all">All Status</option>
                                     <option value="active">Active</option>
                                     <option value="pending">Pending</option>
                                     <option value="inactive">Inactive</option>
                                 </select>
-                                <button onclick="openModal('member-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow"><i class="fas fa-plus mr-1"></i> Add</button>
+                                <button onclick="openModal('member-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow btn-interactive"><i class="fas fa-plus mr-1"></i> Add</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -305,18 +532,21 @@
                 </div>
 
                 <!-- 3.5 MESSAGES TAB -->
-                <div id="tab-messages" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
-                        <h3 class="font-bold text-lg text-slate-800 dark:text-white">Inbox</h3>
+                <div id="tab-messages" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white">Inbox</h3>
+                            <p class="text-sm text-slate-500">Manage incoming messages</p>
+                        </div>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterMessages(this.value)" placeholder="Search Messages..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterMessages(this.value)" placeholder="Search Messages..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadMessages()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="loadMessages()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden">
                         <table class="w-full text-left text-sm custom-table text-slate-600 dark:text-slate-300">
                             <thead class="bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-6 py-4">From</th><th class="px-6 py-4">Message</th><th class="px-6 py-4">Date</th><th class="px-6 py-4 text-right">Actions</th></tr></thead>
                             <tbody id="messages-list"></tbody>
@@ -325,72 +555,72 @@
                 </div>
 
                 <!-- 4. EVENTS TAB -->
-                <div id="tab-events" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-events" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Events</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterEvents(this.value)" placeholder="Search Events..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterEvents(this.value)" placeholder="Search Events..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadEvents()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('event-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg"><i class="fas fa-plus mr-2"></i> Add</button>
+                            <button onclick="loadEvents()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('event-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg btn-interactive"><i class="fas fa-plus mr-2"></i> Add</button>
                         </div>
                     </div>
                     <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- 5. GALLERY TAB -->
-                <div id="tab-gallery" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-gallery" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Gallery Albums</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterAlbums(this.value)" placeholder="Search Albums..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterAlbums(this.value)" placeholder="Search Albums..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadAlbums()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('album-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg"><i class="fas fa-plus mr-2"></i> New Album</button>
+                            <button onclick="loadAlbums()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('album-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg btn-interactive"><i class="fas fa-plus mr-2"></i> New Album</button>
                         </div>
                     </div>
                     <div id="albums-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
                     
-                    <div id="album-manager" class="hidden bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 mt-6">
+                    <div id="album-manager" class="hidden bg-white dark:bg-slate-800 rounded-2xl p-6 card-elevated border border-slate-100 dark:border-slate-700 mt-6">
                         <div class="flex justify-between items-center mb-6">
-                            <button onclick="closeAlbumManager()" class="text-slate-500 dark:text-slate-400 hover:text-blue-600 text-sm font-bold"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                            <button onclick="closeAlbumManager()" class="text-slate-500 dark:text-slate-400 hover:text-blue-600 text-sm font-bold btn-interactive"><i class="fas fa-arrow-left mr-2"></i> Back</button>
                             <h4 id="manage-album-title" class="font-bold text-lg text-slate-800 dark:text-white">Manage Images</h4>
-                            <button onclick="openModal('image-modal')" class="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-700"><i class="fas fa-cloud-upload-alt mr-1"></i> Add Images</button>
+                            <button onclick="openModal('image-modal')" class="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-700 btn-interactive"><i class="fas fa-cloud-upload-alt mr-1"></i> Add Images</button>
                         </div>
                         <div id="album-images-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
                     </div>
                 </div>
 
                 <!-- 6. SLIDESHOW TAB -->
-                <div id="tab-slideshow" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-slideshow" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Home Slideshow</h3>
                         <div class="flex gap-2">
-                            <button onclick="loadSlides()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('slide-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700"><i class="fas fa-plus mr-2"></i> Add Slide</button>
+                            <button onclick="loadSlides()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('slide-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 btn-interactive"><i class="fas fa-plus mr-2"></i> Add Slide</button>
                         </div>
                     </div>
                     <div id="slides-list" class="space-y-4"></div>
                 </div>
 
                 <!-- 7. DOWNLOADS TAB -->
-                <div id="tab-downloads" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-downloads" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Downloads</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterDownloads(this.value)" placeholder="Search Files..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterDownloads(this.value)" placeholder="Search Files..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadDownloads()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('download-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700"><i class="fas fa-plus mr-2"></i> Add File</button>
+                            <button onclick="loadDownloads()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('download-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 btn-interactive"><i class="fas fa-plus mr-2"></i> Add File</button>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden">
                         <table class="w-full text-left text-sm custom-table text-slate-600 dark:text-slate-300">
                             <thead class="bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-6 py-4">File Name</th><th class="px-6 py-4">Category</th><th class="px-6 py-4 text-right">Actions</th></tr></thead>
                             <tbody id="downloads-list"></tbody>
@@ -399,92 +629,97 @@
                 </div>
 
                 <!-- 8. QUICK LINKS TAB -->
-                <div id="tab-quicklinks" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-quicklinks" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Quick Links</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterQuickLinks(this.value)" placeholder="Search Links..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterQuickLinks(this.value)" placeholder="Search Links..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadQuickLinks()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('quicklink-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700"><i class="fas fa-plus mr-2"></i> Add Link</button>
+                            <button onclick="loadQuickLinks()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('quicklink-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 btn-interactive"><i class="fas fa-plus mr-2"></i> Add Link</button>
                         </div>
                     </div>
                     <div id="quicklinks-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
 
-                <!-- 9. OFFICER MANAGEMENT (Updated Layout) -->
-                <div id="tab-officers" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <!-- 9. OFFICER MANAGEMENT -->
+                <div id="tab-officers" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Officer Management</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterOfficers(this.value)" placeholder="Search Officers..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterOfficers(this.value)" placeholder="Search Officers..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadOfficers()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('officer-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700"><i class="fas fa-plus mr-2"></i> Add Officer</button>
+                            <button onclick="loadOfficers()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('officer-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 btn-interactive"><i class="fas fa-plus mr-2"></i> Add Officer</button>
                         </div>
                     </div>
                     <div id="officers-grid" class="space-y-4"></div>
                 </div>
 
                 <!-- 10. SPORTS TEAMS -->
-                <div id="tab-sports" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700">
+                <div id="tab-sports" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-slate-800 dark:text-white">Sports Teams</h3>
                         <div class="flex gap-2">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" onkeyup="filterSports(this.value)" placeholder="Search Sports..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none w-64">
+                                <input type="text" onkeyup="filterSports(this.value)" placeholder="Search Sports..." class="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all w-64">
                             </div>
-                            <button onclick="loadSports()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition"><i class="fas fa-sync-alt"></i></button>
-                            <button onclick="openModal('sport-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700"><i class="fas fa-plus mr-2"></i> Add Team</button>
+                            <button onclick="loadSports()" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-200 transition btn-interactive"><i class="fas fa-sync-alt"></i></button>
+                            <button onclick="openModal('sport-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 btn-interactive"><i class="fas fa-plus mr-2"></i> Add Team</button>
                         </div>
                     </div>
                     <div id="sports-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
                 </div>
 
                 <!-- 11. SETTINGS TAB -->
-                <div id="tab-settings" class="tab-content hidden space-y-6 animate-fade-in">
-                    <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 max-w-2xl">
+                <div id="tab-settings" class="tab-content hidden space-y-6 animate-fade-in tab-transition">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 max-w-2xl">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-white">Site Configuration</h3>
-                            <button onclick="loadSettings()" class="text-slate-400 hover:text-blue-600"><i class="fas fa-sync-alt"></i></button>
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Site Configuration</h3>
+                                <p class="text-sm text-slate-500">Manage organization settings</p>
+                            </div>
+                            <button onclick="loadSettings()" class="text-slate-400 hover:text-blue-600 btn-interactive"><i class="fas fa-sync-alt"></i></button>
                         </div>
                         <form id="settings-form" class="space-y-4 text-slate-600 dark:text-slate-300">
                             <div>
-                                <label class="block text-xs font-bold uppercase mb-1">Club Address</label>
-                                <input type="text" id="set-address" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                <label class="block text-xs font-bold uppercase mb-2">Club Address</label>
+                                <input type="text" id="set-address" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold uppercase mb-1">Contact Phone</label>
-                                    <input type="text" id="set-phone" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                    <label class="block text-xs font-bold uppercase mb-2">Contact Phone</label>
+                                    <input type="text" id="set-phone" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold uppercase mb-1">Contact Email</label>
-                                    <input type="email" id="set-email" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                    <label class="block text-xs font-bold uppercase mb-2">Contact Email</label>
+                                    <input type="email" id="set-email" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase mb-1 text-blue-600 dark:text-blue-400">Super Admin WhatsApp</label>
-                                <input type="text" id="set-super-wa" class="w-full p-3 rounded-lg border border-blue-200 dark:border-blue-900 dark:bg-slate-700 dark:text-white" placeholder="e.g. 9471XXXXXXX">
+                                <label class="block text-xs font-bold uppercase mb-2 text-blue-600 dark:text-blue-400">Super Admin WhatsApp</label>
+                                <input type="text" id="set-super-wa" class="w-full p-3 rounded-lg border border-blue-200 dark:border-blue-900 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="e.g. 9471XXXXXXX">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase mb-1">Admin Support WhatsApp</label>
-                                <input type="text" id="set-admin-wa" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white" placeholder="For notifications">
+                                <label class="block text-xs font-bold uppercase mb-2">Admin Support WhatsApp</label>
+                                <input type="text" id="set-admin-wa" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="For notifications">
                             </div>
                             <hr class="border-slate-100 dark:border-slate-700 my-4">
                             <h4 class="font-bold text-sm">Social Media Links</h4>
                             <div class="grid grid-cols-2 gap-4">
-                                <input type="text" id="set-fb" placeholder="Facebook URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
-                                <input type="text" id="set-yt" placeholder="YouTube URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
-                                <input type="text" id="set-ig" placeholder="Instagram URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
-                                <input type="text" id="set-wa" placeholder="WhatsApp URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                <input type="text" id="set-fb" placeholder="Facebook URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                                <input type="text" id="set-yt" placeholder="YouTube URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                                <input type="text" id="set-ig" placeholder="Instagram URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                                <input type="text" id="set-wa" placeholder="WhatsApp URL" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                             </div>
-                            <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-3 rounded-xl font-bold w-full mt-4 shadow-lg transition">Save Changes</button>
+                            <button type="submit" class="bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white px-6 py-3 rounded-xl font-bold w-full mt-4 shadow-lg transition-all btn-interactive">
+                                <i class="fas fa-check mr-2"></i>Save Changes
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -493,74 +728,128 @@
         </main>
     </div>
 
-    <!-- MODALS (Fixed) -->
+    <!-- MODALS (Enhanced with smooth animations) -->
     
     <!-- Admin Modal -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl transform scale-95 transition-transform duration-300">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Manage Admin</h3>
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Manage Admin</h3>
+                <button onclick="closeModal('admin-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="admin-form" class="space-y-4">
                 <input type="hidden" id="admin-id">
-                <input type="text" id="admin-name-input" placeholder="Full Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="email" id="admin-email-input" placeholder="Email Address" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="password" id="admin-password-input" placeholder="Password (Min 6 chars)" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <p class="text-xs text-slate-400 -mt-2">Leave blank to keep existing password.</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="admin-phone-input" placeholder="Phone" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                    <select id="admin-status-input" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Full Name</label>
+                    <input type="text" id="admin-name-input" placeholder="Full Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
                 </div>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('admin-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Email Address</label>
+                    <input type="email" id="admin-email-input" placeholder="Email Address" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Password</label>
+                    <input type="password" id="admin-password-input" placeholder="Password (Min 6 chars)" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <p class="text-xs text-slate-400 mt-1">Leave blank to keep existing password.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Phone</label>
+                        <input type="text" id="admin-phone-input" placeholder="Phone" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Status</label>
+                        <select id="admin-status-input" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('admin-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Member Modal -->
-    <div id="member-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg overflow-y-auto max-h-[90vh] shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Member Details</h3>
+    <div id="member-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg overflow-y-auto max-h-[90vh] shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Member Details</h3>
+                <button onclick="closeModal('member-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="member-form" class="space-y-4">
                 <input type="hidden" id="mem-id">
-                <input type="text" id="mem-name" placeholder="Full Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="mem-nic" placeholder="NIC" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="mem-phone" placeholder="Phone" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                    <input type="text" id="mem-whatsapp" placeholder="WhatsApp" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Full Name</label>
+                    <input type="text" id="mem-name" placeholder="Full Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
                 </div>
-                <input type="email" id="mem-email" placeholder="Email (Optional)" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <input type="text" id="mem-address" placeholder="Address" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <input type="date" id="mem-dob" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <textarea id="mem-bio" rows="2" placeholder="Bio/Skills" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('member-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">NIC</label>
+                    <input type="text" id="mem-nic" placeholder="NIC" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Phone</label>
+                        <input type="text" id="mem-phone" placeholder="Phone" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">WhatsApp</label>
+                        <input type="text" id="mem-whatsapp" placeholder="WhatsApp" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Email</label>
+                    <input type="email" id="mem-email" placeholder="Email (Optional)" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Address</label>
+                    <input type="text" id="mem-address" placeholder="Address" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Date of Birth</label>
+                    <input type="date" id="mem-dob" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Bio/Skills</label>
+                    <textarea id="mem-bio" rows="2" placeholder="Bio/Skills" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('member-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Officer Modal -->
-    <div id="officer-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Add/Edit Officer</h3>
+    <div id="officer-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Add/Edit Officer</h3>
+                <button onclick="closeModal('officer-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="officer-form" class="space-y-4">
                 <input type="hidden" id="off-id">
-                <input type="text" id="off-name" placeholder="Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="off-pos" placeholder="Position" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Name</label>
+                    <input type="text" id="off-name" placeholder="Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Position</label>
+                    <input type="text" id="off-pos" placeholder="Position" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Date of Birth</label>
-                        <input type="date" id="off-dob" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">Date of Birth</label>
+                        <input type="date" id="off-dob" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Appointed Date</label>
-                        <input type="date" id="off-appointed" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">Appointed Date</label>
+                        <input type="date" id="off-appointed" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                     </div>
                 </div>
 
@@ -572,7 +861,7 @@
                             <label for="off-show-email" class="text-xs text-slate-400">Public Visible</label>
                         </div>
                     </div>
-                    <input type="email" id="off-email" placeholder="Email" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    <input type="email" id="off-email" placeholder="Email" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 </div>
 
                 <div>
@@ -583,187 +872,257 @@
                             <label for="off-show-phone" class="text-xs text-slate-400">Public Visible</label>
                         </div>
                     </div>
-                    <input type="text" id="off-phone" placeholder="Phone" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    <input type="text" id="off-phone" placeholder="Phone" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Profile Image</label>
                     <div class="flex gap-2">
-                        <input type="text" id="off-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="text" id="off-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         <span class="text-sm self-center text-slate-400">OR</span>
                         <input type="file" id="off-file" class="w-1/3 text-xs dark:text-slate-300" accept="image/*">
                     </div>
                 </div>
 
-                <input type="number" id="off-order" placeholder="Display Order" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('officer-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Display Order</label>
+                    <input type="number" id="off-order" placeholder="Display Order" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('officer-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Sport Modal -->
-    <div id="sport-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Sports Team</h3>
+    <div id="sport-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Sports Team</h3>
+                <button onclick="closeModal('sport-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="sport-form" class="space-y-4">
                 <input type="hidden" id="sport-id">
-                <input type="text" id="sport-name" placeholder="Sport Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="sport-captain" placeholder="Captain Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Sport Name</label>
+                    <input type="text" id="sport-name" placeholder="Sport Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Captain Name</label>
+                    <input type="text" id="sport-captain" placeholder="Captain Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
                 
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Team Photo</label>
                     <div class="flex gap-2">
-                        <input type="text" id="sport-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="text" id="sport-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         <span class="text-sm self-center text-slate-400">OR</span>
                         <input type="file" id="sport-file" class="w-1/3 text-xs dark:text-slate-300" accept="image/*">
                     </div>
                 </div>
 
-                <textarea id="sport-desc" placeholder="Description" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('sport-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Description</label>
+                    <textarea id="sport-desc" placeholder="Description" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('sport-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Download Modal -->
-    <div id="download-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Download Item</h3>
+    <div id="download-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Download Item</h3>
+                <button onclick="closeModal('download-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="download-form" class="space-y-4">
                 <input type="hidden" id="dl-id">
-                <input type="text" id="dl-name" placeholder="File Name" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="dl-url" placeholder="File URL / Drive Link" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="dl-cat" placeholder="Category (e.g. PDF, Image)" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('download-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">File Name</label>
+                    <input type="text" id="dl-name" placeholder="File Name" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">File URL / Drive Link</label>
+                    <input type="text" id="dl-url" placeholder="File URL / Drive Link" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Category</label>
+                    <input type="text" id="dl-cat" placeholder="Category (e.g. PDF, Image)" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('download-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Quick Link Modal -->
-    <div id="quicklink-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Quick Link</h3>
+    <div id="quicklink-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Quick Link</h3>
+                <button onclick="closeModal('quicklink-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="quicklink-form" class="space-y-4">
                 <input type="hidden" id="ql-id">
-                <input type="text" id="ql-title" placeholder="Link Title" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="text" id="ql-url" placeholder="URL" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <textarea id="ql-desc" placeholder="Short Description" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('quicklink-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Link Title</label>
+                    <input type="text" id="ql-title" placeholder="Link Title" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">URL</label>
+                    <input type="text" id="ql-url" placeholder="URL" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Description</label>
+                    <textarea id="ql-desc" placeholder="Short Description" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('quicklink-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Event Modal -->
-    <div id="event-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Add/Edit Event</h3>
+    <div id="event-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Add/Edit Event</h3>
+                <button onclick="closeModal('event-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="event-form" class="space-y-4">
                 <input type="hidden" id="event-id">
-                <input type="text" id="event-title" placeholder="Event Title" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <textarea id="event-desc" placeholder="Description" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" rows="3"></textarea>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Event Title</label>
+                    <input type="text" id="event-title" placeholder="Event Title" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Description</label>
+                    <textarea id="event-desc" placeholder="Description" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" rows="3"></textarea>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="event-date" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                    <input type="time" id="event-time" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Date</label>
+                        <input type="date" id="event-date" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Time</label>
+                        <input type="time" id="event-time" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
                 </div>
                 
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Cover Image</label>
                     <div class="flex gap-2">
-                        <input type="text" id="event-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="text" id="event-img" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         <span class="text-sm self-center text-slate-400">OR</span>
                         <input type="file" id="event-file" class="w-1/3 text-xs dark:text-slate-300" accept="image/*">
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('event-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('event-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Album Modal -->
-    <div id="album-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Album</h3>
+    <div id="album-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Album</h3>
+                <button onclick="closeModal('album-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="album-form" class="space-y-4">
                 <input type="hidden" id="album-id">
-                <input type="text" id="album-title" placeholder="Album Title" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <input type="date" id="album-date" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Album Title</label>
+                    <input type="text" id="album-title" placeholder="Album Title" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Date</label>
+                    <input type="date" id="album-date" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Cover Image</label>
                     <div class="flex gap-2">
-                        <input type="text" id="album-cover" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="text" id="album-cover" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         <span class="text-sm self-center text-slate-400">OR</span>
                         <input type="file" id="album-file" class="w-1/3 text-xs dark:text-slate-300" accept="image/*">
                     </div>
                 </div>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('album-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('album-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Image Modal (Updated for Multiple) -->
-    <div id="image-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Add Images (Up to 50)</h3>
+    <!-- Image Modal -->
+    <div id="image-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Add Images (Up to 50)</h3>
+                <button onclick="closeModal('image-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="image-form" class="space-y-4">
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Select Images</label>
                     <div class="flex gap-2">
-                        <!-- Changed to allow multiple -->
-                        <input type="file" id="img-files" class="w-full text-xs dark:text-slate-300 border p-3 rounded-lg border-slate-200 dark:border-slate-700" accept="image/*" multiple>
+                        <input type="file" id="img-files" class="w-full text-xs dark:text-slate-300 border p-3 rounded-lg border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all" accept="image/*" multiple>
                     </div>
                     <p class="text-[10px] text-slate-400">Hold Ctrl/Cmd to select multiple files.</p>
                 </div>
                 
-                <!-- Optional Single URL fallback hidden or secondary -->
-                <input type="text" id="img-url" placeholder="Or paste single image URL..." class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white text-sm">
+                <input type="text" id="img-url" placeholder="Or paste single image URL..." class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm">
                 
-                <input type="text" id="img-caption" placeholder="Caption (Optional)" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                <input type="text" id="img-caption" placeholder="Caption (Optional)" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('image-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700">Upload All</button>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('image-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-lg btn-interactive">Upload All</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Slide Modal -->
-    <div id="slide-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white">Slide Item</h3>
+    <div id="slide-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in card-elevated">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Slide Item</h3>
+                <button onclick="closeModal('slide-modal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 btn-interactive"><i class="fas fa-times text-xl"></i></button>
+            </div>
             <form id="slide-form" class="space-y-4">
                 <input type="hidden" id="slide-id">
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400">Slide Image</label>
                     <div class="flex gap-2">
-                        <input type="text" id="slide-url" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="text" id="slide-url" placeholder="Paste URL here..." class="flex-1 p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         <span class="text-sm self-center text-slate-400">OR</span>
                         <input type="file" id="slide-file" class="w-1/3 text-xs dark:text-slate-300" accept="image/*">
                     </div>
                 </div>
-                <input type="number" id="slide-order" placeholder="Display Order (e.g. 1)" class="w-full p-3 rounded-lg border dark:bg-slate-700 dark:border-slate-600 dark:text-white" required>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="closeModal('slide-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300">Cancel</button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Save</button>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Display Order</label>
+                    <input type="number" id="slide-order" placeholder="Display Order (e.g. 1)" class="w-full p-3 rounded-lg border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('slide-modal')" class="px-4 py-2 text-slate-500 font-bold hover:text-slate-700 dark:hover:text-slate-300 btn-interactive">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg btn-interactive">Save</button>
                 </div>
             </form>
         </div>
@@ -946,7 +1305,7 @@
             if(tabId === 'sports') loadSports();
         }
 
-        // Image Upload Helper (FIXED)
+        // Image Upload Helper
         async function uploadFile(file) {
             if (!file) return null;
             
@@ -978,7 +1337,7 @@
             return publicUrlData.publicUrl;
         }
 
-        // --- DASHBOARD ---
+        // DASHBOARD
         async function initDashboard() {
             const { count: mCount } = await window.supabaseClient.from('members').select('*', { count: 'exact', head: true });
             document.getElementById('dash-total-members').innerText = mCount || 0;
@@ -989,20 +1348,37 @@
             const { count: msgCount } = await window.supabaseClient.from('messages').select('*', { count: 'exact', head: true });
             document.getElementById('dash-total-msgs').innerText = msgCount || 0;
 
+            const { data: allMembers } = await window.supabaseClient.from('members').select('created_at').order('created_at', { ascending: true });
+            
+            // Group members by month from the last 6 months
+            const monthlyGrowth = getMemberGrowthByMonth(allMembers || []);
+            const monthLabels = monthlyGrowth.labels;
+            const growthData = monthlyGrowth.data;
+
             const ctx1 = document.getElementById('memberChart');
             if(ctx1) new Chart(ctx1, { 
                 type: 'line', 
                 data: { 
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], 
+                    labels: monthLabels, 
                     datasets: [{ 
-                        label: 'Growth', 
-                        data: [10, 15, 25, 30, 45, mCount || 50], 
+                        label: 'Member Growth', 
+                        data: growthData, 
                         borderColor: '#2563eb', 
                         backgroundColor: 'rgba(37, 99, 235, 0.1)', 
                         fill: true,
                         tension: 0.4 
                     }] 
-                } 
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: mCount + 5 }
+                    }
+                }
             });
             const ctx2 = document.getElementById('activityChart');
             if(ctx2) new Chart(ctx2, { 
@@ -1014,11 +1390,53 @@
                         data: [eCount || 0, mCount || 0, msgCount || 0], 
                         backgroundColor: ['#8b5cf6', '#3b82f6', '#10b981'] 
                     }] 
-                } 
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
             });
         }
 
-        // --- MEMBERS ---
+        function getMemberGrowthByMonth(members) {
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthData = {};
+            
+            // Initialize last 6 months
+            const now = new Date();
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                monthData[key] = 0;
+            }
+            
+            // Count members by month
+            members.forEach(member => {
+                if (member.created_at) {
+                    const date = new Date(member.created_at);
+                    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    if (key in monthData) {
+                        monthData[key]++;
+                    }
+                }
+            });
+            
+            // Calculate cumulative growth
+            const labels = [];
+            const data = [];
+            let cumulative = 0;
+            
+            Object.keys(monthData).sort().forEach(key => {
+                const monthIndex = parseInt(key.split('-')[1]) - 1;
+                labels.push(monthNames[monthIndex]);
+                cumulative += monthData[key];
+                data.push(cumulative);
+            });
+            
+            return { labels, data };
+        }
+
+        // MEMBERS
         async function loadMembers() {
             showLoading();
             const { data } = await window.supabaseClient.from('members').select('*').order('created_at', { ascending: false });
@@ -1036,11 +1454,11 @@
                 const statusAction = m.status === 'pending' ? 'active' : (m.status === 'active' ? 'inactive' : 'active');
                 
                 const actions = `
-                    <button onclick="updateMemberStatus(${m.id}, '${statusAction}')" class="text-slate-500 mr-2 hover:scale-110 transition" title="Toggle Status"><i class="fas ${eyeIcon}"></i></button>
-                    <button onclick="editMember(${m.id})" class="text-blue-500 mr-2 hover:scale-110 transition"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteMember(${m.id})" class="text-red-400 hover:scale-110 transition"><i class="fas fa-trash"></i></button>`;
+                    <button onclick="updateMemberStatus(${m.id}, '${statusAction}')" class="text-slate-500 mr-3 hover:text-blue-600 hover:scale-110 transition" title="Toggle Status"><i class="fas ${eyeIcon}"></i></button>
+                    <button onclick="editMember(${m.id})" class="text-blue-500 mr-3 hover:text-blue-700 hover:scale-110 transition"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteMember(${m.id})" class="text-red-400 hover:text-red-600 hover:scale-110 transition"><i class="fas fa-trash"></i></button>`;
                 
-                tbody.innerHTML += `<tr><td class="px-6 py-4">${m.full_name}</td><td class="px-6 py-4 text-xs">${m.phone}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs ${m.status==='active'?'bg-green-100 text-green-700':'bg-orange-100 text-orange-700'}">${m.status}</span></td><td class="px-6 py-4 text-right">${actions}</td></tr>`;
+                tbody.innerHTML += `<tr class="table-row-hover"><td class="px-6 py-4">${m.full_name}</td><td class="px-6 py-4 text-xs">${m.phone}</td><td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${m.status==='active'?'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400':'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'}">${m.status}</span></td><td class="px-6 py-4 text-right">${actions}</td></tr>`;
             });
         }
 
@@ -1097,9 +1515,8 @@
 
         window.updateMemberStatus = async function(id, status) { await window.supabaseClient.from('members').update({ status }).eq('id', id); loadMembers(); }
         window.deleteMember = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('members').delete().eq('id', id); loadMembers(); } }
-        window.filterMembers = function(s) { loadMembers(); }
 
-        // --- EVENTS ---
+        // EVENTS
         async function loadEvents() {
             showLoading();
             const { data } = await window.supabaseClient.from('events').select('*');
@@ -1111,7 +1528,7 @@
         function renderEvents(data) {
             const grid = document.getElementById('events-grid');
             grid.innerHTML = '';
-            if(data) data.forEach(e => { grid.innerHTML += `<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 relative group"><img src="${e.cover_image_url}" class="w-full h-32 object-cover rounded mb-2"><h4 class="font-bold dark:text-white">${e.title}</h4><div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="editEvent(${e.id})" class="bg-white text-blue-500 p-1 rounded shadow"><i class="fas fa-edit"></i></button><button onclick="deleteEvent(${e.id})" class="bg-white text-red-500 p-1 rounded shadow"><i class="fas fa-trash"></i></button></div></div>`; });
+            if(data) data.forEach(e => { grid.innerHTML += `<div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden group relative"><img src="${e.cover_image_url}" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300"><div class="p-4"><h4 class="font-bold dark:text-white group-hover:text-blue-600 transition">${e.title}</h4><p class="text-xs text-slate-500 mt-1">${new Date(e.event_date).toLocaleDateString()}</p></div><div class="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="editEvent(${e.id})" class="bg-white/90 text-blue-500 p-2 rounded-full shadow-lg hover:bg-white"><i class="fas fa-edit"></i></button><button onclick="deleteEvent(${e.id})" class="bg-white/90 text-red-500 p-2 rounded-full shadow-lg hover:bg-white"><i class="fas fa-trash"></i></button></div></div>`; });
         }
 
         window.filterEvents = function(query) {
@@ -1148,7 +1565,7 @@
         });
         window.deleteEvent = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('events').delete().eq('id', id); loadEvents(); } }
 
-        // --- DOWNLOADS ---
+        // DOWNLOADS
         async function loadDownloads() {
             showLoading();
             const { data } = await window.supabaseClient.from('downloads').select('*');
@@ -1161,7 +1578,7 @@
             const list = document.getElementById('downloads-list');
             list.innerHTML = '';
             if(data) data.forEach(d => {
-                list.innerHTML += `<tr><td class="px-6 py-4">${d.file_name}</td><td class="px-6 py-4">${d.category}</td><td class="px-6 py-4 text-right"><button onclick="editDownload(${d.id})" class="text-blue-500 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteDownload(${d.id})" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
+                list.innerHTML += `<tr class="table-row-hover"><td class="px-6 py-4">${d.file_name}</td><td class="px-6 py-4">${d.category}</td><td class="px-6 py-4 text-right"><button onclick="editDownload(${d.id})" class="text-blue-500 mr-3 hover:scale-110"><i class="fas fa-edit"></i></button><button onclick="deleteDownload(${d.id})" class="text-red-500 hover:scale-110"><i class="fas fa-trash"></i></button></td></tr>`;
             });
         }
 
@@ -1193,7 +1610,7 @@
         });
         window.deleteDownload = async function(id) { if(confirm("Delete file?")) { await window.supabaseClient.from('downloads').delete().eq('id', id); loadDownloads(); } }
 
-        // --- QUICK LINKS ---
+        // QUICK LINKS
         async function loadQuickLinks() {
             showLoading();
             const { data } = await window.supabaseClient.from('quick_links').select('*');
@@ -1208,20 +1625,20 @@
             if(data) data.forEach(q => {
                 const eye = q.is_active ? 'fa-eye' : 'fa-eye-slash';
                 list.innerHTML += `
-                <div class="relative group bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative group bg-white dark:bg-slate-800 p-5 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition duration-300"></div>
                     <div class="relative z-10 flex justify-between items-start">
-                        <div>
+                        <div class="flex-1">
                             <h4 class="font-bold text-lg text-slate-800 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">${q.title}</h4>
                             <a href="${q.link_url}" target="_blank" class="text-xs text-slate-500 truncate block max-w-[200px] hover:underline">${q.link_url}</a>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-2 line-clamp-2">${q.description || 'No description'}</p>
                         </div>
-                        <div class="flex gap-2">
-                            <button onclick="toggleLink(${q.id}, ${q.is_active})" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-blue-600 transition"><i class="fas ${eye}"></i></button>
-                            <button onclick="editQuickLink(${q.id})" class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500 hover:text-blue-700 transition"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteQuickLink(${q.id})" class="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center text-red-500 hover:text-red-700 transition"><i class="fas fa-trash"></i></button>
+                        <div class="flex gap-2 flex-shrink-0 ml-3">
+                            <button onclick="toggleLink(${q.id}, ${q.is_active})" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-blue-600 transition"><i class="fas ${eye}"></i></button>
+                            <button onclick="editQuickLink(${q.id})" class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 hover:text-blue-700 transition"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteQuickLink(${q.id})" class="w-9 h-9 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 hover:text-red-700 transition"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-3 line-clamp-2 relative z-10">${q.description || 'No description'}</p>
                 </div>`;
             });
         }
@@ -1255,7 +1672,7 @@
         window.toggleLink = async function(id, current) { await window.supabaseClient.from('quick_links').update({ is_active: !current }).eq('id', id); loadQuickLinks(); }
         window.deleteQuickLink = async function(id) { if(confirm("Delete link?")) { await window.supabaseClient.from('quick_links').delete().eq('id', id); loadQuickLinks(); } }
 
-        // --- ALBUMS ---
+        // ALBUMS
         async function loadAlbums() {
             showLoading();
             const { data } = await window.supabaseClient.from('gallery_albums').select('*');
@@ -1269,7 +1686,7 @@
             list.innerHTML = '';
             if(data) data.forEach(a => { 
                 const eye = a.is_hidden ? 'fa-eye-slash' : 'fa-eye';
-                list.innerHTML += `<div onclick="manageAlbum(${a.id}, '${a.title}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700 cursor-pointer hover:shadow-lg relative group"><img src="${a.cover_image_url}" class="w-full h-32 object-cover rounded mb-2"><h4 class="font-bold dark:text-white">${a.title}</h4><div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100"><button onclick="event.stopPropagation(); toggleAlbum(${a.id}, ${a.is_hidden})" class="bg-white p-1 rounded mr-1"><i class="fas ${eye}"></i></button><button onclick="event.stopPropagation(); editAlbum(${a.id})" class="bg-white text-blue-500 p-1 rounded mr-1"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteAlbum(${a.id})" class="bg-white text-red-500 p-1 rounded"><i class="fas fa-trash"></i></button></div></div>`; 
+                list.innerHTML += `<div onclick="manageAlbum(${a.id}, '${a.title}')" class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 cursor-pointer group relative overflow-hidden"><img src="${a.cover_image_url}" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300"><div class="p-4"><h4 class="font-bold dark:text-white group-hover:text-blue-600 transition">${a.title}</h4><p class="text-xs text-slate-500 mt-1">${new Date(a.event_date).toLocaleDateString()}</p></div><div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition"><button onclick="event.stopPropagation(); toggleAlbum(${a.id}, ${a.is_hidden})" class="bg-white/90 p-2 rounded-full mr-1 shadow-lg hover:bg-white"><i class="fas ${eye}"></i></button><button onclick="event.stopPropagation(); editAlbum(${a.id})" class="bg-white/90 text-blue-500 p-2 rounded-full mr-1 shadow-lg hover:bg-white"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteAlbum(${a.id})" class="bg-white/90 text-red-500 p-2 rounded-full shadow-lg hover:bg-white"><i class="fas fa-trash"></i></button></div></div>`; 
             });
         }
 
@@ -1308,15 +1725,15 @@
         async function loadAlbumImages(id) { 
             const { data } = await window.supabaseClient.from('gallery_images').select('*').eq('album_id', id); 
             const g = document.getElementById('album-images-grid'); g.innerHTML = ''; 
-            if(data) data.forEach(i => g.innerHTML += `<div class="relative"><img src="${i.image_url}" class="w-full h-24 object-cover rounded"><button onclick="deleteImage(${i.id})" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl"><i class="fas fa-times"></i></button></div>`); 
+            if(data) data.forEach(i => g.innerHTML += `<div class="relative group"><img src="${i.image_url}" class="w-full h-24 object-cover rounded group-hover:scale-110 transition-transform"><button onclick="deleteImage(${i.id})" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times"></i></button></div>`); 
         }
         
-        // --- BULK IMAGE UPLOAD (ROBUST FIX) ---
+        // BULK IMAGE UPLOAD
         document.getElementById('image-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             showLoading();
             const files = document.getElementById('img-files').files;
-            const caption = document.getElementById('img-caption').value; // Get caption once
+            const caption = document.getElementById('img-caption').value;
             
             if (files.length > 50) {
                 alert("Please select fewer than 50 images.");
@@ -1325,9 +1742,7 @@
             }
 
             if (files.length > 0) {
-                // Bulk Upload Loop
                 let successCount = 0;
-                
                 for(let i = 0; i < files.length; i++) {
                     const file = files[i];
                     document.getElementById('loading-text').innerText = `Uploading ${i+1}/${files.length}`;
@@ -1336,7 +1751,6 @@
                         const url = await uploadFile(file);
                         
                         if(url) {
-                            // Insert into database ONLY if upload succeeded
                             const { error: dbError } = await window.supabaseClient
                                 .from('gallery_images')
                                 .insert([{ 
@@ -1348,13 +1762,12 @@
                             if (!dbError) successCount++;
                             else console.error("DB Insert Error:", dbError);
                         } else {
-                            console.error(`Skipping file ${i+1} due to upload failure (URL null).`);
+                            console.error(`Skipping file ${i+1} due to upload failure.`);
                         }
                     } catch (error) {
                         console.error(`Failed to process file ${i+1}:`, error);
                     }
                     
-                    // Small delay to prevent network throttling
                     await new Promise(r => setTimeout(r, 100));
                 }
                 
@@ -1362,7 +1775,6 @@
                 else if (successCount < files.length) alert(`Uploaded ${successCount} out of ${files.length} images.`);
                 
             } else {
-                // Handle single URL input case
                 const urlInput = document.getElementById('img-url').value;
                 if(urlInput) {
                     await window.supabaseClient.from('gallery_images').insert([{ 
@@ -1377,7 +1789,6 @@
             loadAlbumImages(activeAlbumId); 
             hideLoading();
             document.getElementById('loading-text').innerText = "Please wait";
-            // Clear input
             document.getElementById('img-files').value = "";
             document.getElementById('img-url').value = "";
         });
@@ -1386,13 +1797,13 @@
         window.deleteAlbum = async function(id) { if(confirm("Delete Album?")) { await window.supabaseClient.from('gallery_albums').delete().eq('id', id); loadAlbums(); } }
         window.toggleAlbum = async function(id, current) { await window.supabaseClient.from('gallery_albums').update({ is_hidden: !current }).eq('id', id); loadAlbums(); }
 
-        // --- SLIDESHOW ---
+        // SLIDESHOW
         async function loadSlides() {
             showLoading();
             const { data } = await window.supabaseClient.from('slideshow_images').select('*').order('display_order');
             const list = document.getElementById('slides-list');
             list.innerHTML = '';
-            if(data) data.forEach(s => { list.innerHTML += `<div class="flex items-center gap-4 p-2 border dark:border-slate-700 rounded bg-white dark:bg-slate-800"><img src="${s.image_url}" class="w-16 h-10 object-cover rounded"><div class="flex-1"><p class="text-xs text-slate-500">Order: ${s.display_order}</p></div><button onclick="editSlide(${s.id})" class="text-blue-500 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteSlide(${s.id})" class="text-red-500"><i class="fas fa-trash"></i></button></div>`; });
+            if(data) data.forEach(s => { list.innerHTML += `<div class="flex items-center gap-4 p-4 border dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 card-elevated group hover:shadow-lg"><img src="${s.image_url}" class="w-20 h-12 object-cover rounded group-hover:scale-110 transition-transform"><div class="flex-1"><p class="text-xs text-slate-500 font-bold">Order: ${s.display_order}</p></div><button onclick="editSlide(${s.id})" class="text-blue-500 mr-2 hover:scale-110 transition"><i class="fas fa-edit"></i></button><button onclick="deleteSlide(${s.id})" class="text-red-500 hover:scale-110 transition"><i class="fas fa-trash"></i></button></div>`; });
             hideLoading();
         }
         
@@ -1422,7 +1833,7 @@
         });
         window.deleteSlide = async function(id) { await window.supabaseClient.from('slideshow_images').delete().eq('id', id); loadSlides(); }
 
-        // --- OFFICERS (UPDATED CARD LAYOUT) ---
+        // OFFICERS
         async function loadOfficers() {
             showLoading();
             const { data } = await window.supabaseClient.from('officers').select('*').order('display_order');
@@ -1436,29 +1847,24 @@
             grid.innerHTML = '';
             if(data) data.forEach(o => {
                 grid.innerHTML += `
-                <div class="relative flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm group hover:shadow-md transition">
-                    <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-blue-50 dark:border-slate-600">
-                        <img src="${o.image_url || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover">
+                <div class="relative flex items-center gap-4 bg-white dark:bg-slate-800 p-5 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group hover:shadow-lg">
+                    <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-3 border-blue-100 dark:border-blue-900/30">
+                        <img src="${o.image_url || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="font-bold text-slate-800 dark:text-white truncate">${o.name}</h4>
-                        <p class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-1">${o.position}</p>
+                        <h4 class="font-bold text-slate-800 dark:text-white truncate group-hover:text-blue-600 transition">${o.name}</h4>
+                        <p class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase mb-2">${o.position}</p>
                         
-                        <div class="space-y-1">
-                            ${o.email ? `<p class="text-[10px] text-slate-500 flex items-center gap-1 truncate"><i class="fas fa-envelope w-3"></i> ${o.email}</p>` : ''}
-                            ${o.phone ? `<p class="text-[10px] text-slate-500 flex items-center gap-1 truncate"><i class="fas fa-phone w-3"></i> ${o.phone}</p>` : ''}
-                            ${o.appointed_date ? `<p class="text-[10px] text-slate-400 flex items-center gap-1 truncate"><i class="fas fa-calendar-alt w-3"></i> Since: ${o.appointed_date}</p>` : ''}
+                        <div class="space-y-1 text-[11px]">
+                            ${o.email ? `<p class="text-slate-500 truncate"><i class="fas fa-envelope w-3"></i> ${o.email}</p>` : ''}
+                            ${o.phone ? `<p class="text-slate-500 truncate"><i class="fas fa-phone w-3"></i> ${o.phone}</p>` : ''}
+                            ${o.appointed_date ? `<p class="text-slate-400 truncate"><i class="fas fa-calendar-alt w-3"></i> Since: ${o.appointed_date}</p>` : ''}
                         </div>
                     </div>
                     
-                    <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition absolute right-2 top-2">
+                    <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition absolute right-3 top-3">
                         <button onclick="editOfficer(${o.id})" class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition"><i class="fas fa-edit text-xs"></i></button>
                         <button onclick="deleteOfficer(${o.id})" class="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 flex items-center justify-center hover:bg-red-100 transition"><i class="fas fa-trash text-xs"></i></button>
-                    </div>
-                    
-                    <div class="absolute bottom-2 right-2 flex gap-1">
-                        ${o.show_email ? '<span class="w-2 h-2 rounded-full bg-green-500" title="Public Email"></span>' : '<span class="w-2 h-2 rounded-full bg-slate-300" title="Hidden Email"></span>'}
-                        ${o.show_phone ? '<span class="w-2 h-2 rounded-full bg-green-500" title="Public Phone"></span>' : '<span class="w-2 h-2 rounded-full bg-slate-300" title="Hidden Phone"></span>'}
                     </div>
                 </div>`;
             });
@@ -1477,15 +1883,12 @@
                 document.getElementById('off-pos').value = data.position;
                 document.getElementById('off-img').value = data.image_url;
                 document.getElementById('off-order').value = data.display_order;
-                
-                // Set new fields
                 document.getElementById('off-dob').value = data.dob || '';
                 document.getElementById('off-appointed').value = data.appointed_date || '';
                 document.getElementById('off-email').value = data.email || '';
                 document.getElementById('off-phone').value = data.phone || '';
                 document.getElementById('off-show-email').checked = data.show_email || false;
                 document.getElementById('off-show-phone').checked = data.show_phone || false;
-                
                 openModal('officer-modal');
             }
         }
@@ -1502,7 +1905,6 @@
                 position: document.getElementById('off-pos').value, 
                 image_url: url, 
                 display_order: document.getElementById('off-order').value || 0,
-                // New Fields
                 dob: document.getElementById('off-dob').value || null,
                 appointed_date: document.getElementById('off-appointed').value || null,
                 email: document.getElementById('off-email').value || null,
@@ -1518,7 +1920,7 @@
         });
         window.deleteOfficer = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('officers').delete().eq('id', id); loadOfficers(); } }
 
-        // --- SPORTS ---
+        // SPORTS
         async function loadSports() {
             showLoading();
             const { data } = await window.supabaseClient.from('sports_teams').select('*');
@@ -1531,7 +1933,7 @@
             const grid = document.getElementById('sports-grid');
             grid.innerHTML = '';
             if(data) data.forEach(s => {
-                grid.innerHTML += `<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-slate-700 relative group"><div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><button onclick="editSport(${s.id})" class="text-blue-500 bg-white p-1 rounded shadow mr-1"><i class="fas fa-edit"></i></button><button onclick="deleteSport(${s.id})" class="text-red-500 bg-white p-1 rounded shadow"><i class="fas fa-trash"></i></button></div><img src="${s.team_photo_url || 'https://via.placeholder.com/200'}" class="w-full h-32 object-cover rounded mb-2"><h4 class="font-bold dark:text-white">${s.sport_name}</h4><p class="text-xs text-slate-500">Capt: ${s.captain_name || 'N/A'}</p></div>`;
+                grid.innerHTML += `<div class="bg-white dark:bg-slate-800 rounded-2xl card-elevated border border-slate-100 dark:border-slate-700 group relative overflow-hidden"><img src="${s.team_photo_url || 'https://via.placeholder.com/200'}" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300"><div class="p-5"><h4 class="font-bold dark:text-white group-hover:text-blue-600 transition text-lg">${s.sport_name}</h4><p class="text-xs text-slate-500 mt-1"><i class="fas fa-user mr-1"></i>Capt: ${s.captain_name || 'N/A'}</p><p class="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-2">${s.description || ''}</p></div><div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition"><button onclick="editSport(${s.id})" class="text-blue-500 bg-white p-2 rounded-full shadow-lg mr-1 hover:bg-slate-50"><i class="fas fa-edit"></i></button><button onclick="deleteSport(${s.id})" class="text-red-500 bg-white p-2 rounded-full shadow-lg hover:bg-slate-50"><i class="fas fa-trash"></i></button></div></div>`;
             });
         }
 
@@ -1568,7 +1970,7 @@
         });
         window.deleteSport = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('sports_teams').delete().eq('id', id); loadSports(); } }
 
-        // --- MESSAGES ---
+        // MESSAGES
         async function loadMessages() {
             showLoading();
             const { data } = await window.supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
@@ -1583,12 +1985,12 @@
             if(data) data.forEach(m => {
                 const date = new Date(m.created_at).toLocaleDateString();
                 tbody.innerHTML += `
-                <tr>
+                <tr class="table-row-hover">
                     <td class="px-6 py-4"><div class="font-bold">${m.name}</div><div class="text-xs text-slate-500">${m.email}</div></td>
-                    <td class="px-6 py-4 text-sm">${m.message}</td>
-                    <td class="px-6 py-4 text-xs">${date}</td>
+                    <td class="px-6 py-4 text-sm line-clamp-2">${m.message}</td>
+                    <td class="px-6 py-4 text-xs text-slate-500">${date}</td>
                     <td class="px-6 py-4 text-right">
-                        <a href="mailto:${m.email}?subject=Reply to your message on Dream Makers" class="text-blue-500 mr-2 hover:scale-110 transition"><i class="fas fa-reply"></i></a>
+                        <a href="mailto:${m.email}?subject=Reply to your message on Dream Makers" class="text-blue-500 mr-3 hover:scale-110 transition"><i class="fas fa-reply"></i></a>
                         <button onclick="deleteMessage(${m.id})" class="text-red-500 hover:scale-110 transition"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>`;
@@ -1602,7 +2004,7 @@
 
         window.deleteMessage = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('messages').delete().eq('id', id); loadMessages(); } }
 
-        // --- SETTINGS ---
+        // SETTINGS
         async function loadSettings() {
             const { data } = await window.supabaseClient.from('site_settings').select('*').limit(1).maybeSingle();
             if(data) {
@@ -1632,29 +2034,10 @@
             };
             const { data } = await window.supabaseClient.from('site_settings').select('id').limit(1);
             if(data.length) await window.supabaseClient.from('site_settings').update(payload).eq('id', data[0].id); else await window.supabaseClient.from('site_settings').insert([payload]);
-            alert("Saved!"); hideLoading();
+            alert("Settings saved successfully!"); hideLoading();
         });
 
-        // --- UTILS ---
-        window.openModal = function(id) { 
-            // If it's a "create" action (no prepopulation logic called before), clear fields
-            if(document.getElementById(id).querySelector('form').checkValidity()) {
-               // Optional: Reset form if opening fresh
-            }
-            document.getElementById(id).classList.remove('hidden'); 
-        }
-        
-        window.closeModal = function(id) { 
-            document.getElementById(id).classList.add('hidden'); 
-            const form = document.getElementById(id).querySelector('form');
-            if(form) {
-                form.reset();
-                const hiddenId = form.querySelector('input[type="hidden"]');
-                if(hiddenId) hiddenId.value = '';
-            }
-        }
-        
-        // --- ADMINS ---
+        // ADMINS
         async function loadAdmins() {
             showLoading();
             const { data } = await window.supabaseClient.from('admins').select('*').order('created_at', { ascending: false });
@@ -1670,17 +2053,17 @@
                 const isSelf = a.id === currentAdmin.id;
                 const lastLogin = a.last_login ? new Date(a.last_login).toLocaleString() : 'Never';
                 const actions = !isSelf ? 
-                    `<button onclick="toggleAdminStatus(${a.id}, '${a.status}')" class="text-slate-500 mr-2 hover:scale-110" title="Deactivate"><i class="fas fa-power-off"></i></button>
-                     <button onclick="editAdmin(${a.id})" class="text-blue-500 mr-2 hover:scale-110"><i class="fas fa-edit"></i></button>
-                     <button onclick="deleteAdmin(${a.id})" class="text-red-500 hover:scale-110"><i class="fas fa-trash"></i></button>` : `<span class="text-xs text-slate-400">Current Session</span>`;
+                    `<button onclick="toggleAdminStatus(${a.id}, '${a.status}')" class="text-slate-500 mr-3 hover:text-orange-500 hover:scale-110 transition" title="Deactivate"><i class="fas fa-power-off"></i></button>
+                     <button onclick="editAdmin(${a.id})" class="text-blue-500 mr-3 hover:text-blue-700 hover:scale-110 transition"><i class="fas fa-edit"></i></button>
+                     <button onclick="deleteAdmin(${a.id})" class="text-red-500 hover:text-red-700 hover:scale-110 transition"><i class="fas fa-trash"></i></button>` : `<span class="text-xs text-slate-400 font-bold">Current Session</span>`;
                 
                 tbody.innerHTML += `
-                <tr>
-                    <td class="px-6 py-4 font-medium">${a.name}</td>
+                <tr class="table-row-hover">
+                    <td class="px-6 py-4 font-bold">${a.name}</td>
                     <td class="px-6 py-4 text-xs">${a.email}</td>
-                    <td class="px-6 py-4 text-xs font-bold uppercase">${a.role}</td>
+                    <td class="px-6 py-4 text-xs font-bold uppercase bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 rounded text-yellow-700 dark:text-yellow-400 w-fit">${a.role}</td>
                     <td class="px-6 py-4 text-xs text-slate-500">${lastLogin}</td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs ${a.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${a.status}</span></td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${a.status === 'active' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}">${a.status}</span></td>
                     <td class="px-6 py-4 text-right">${actions}</td>
                 </tr>`;
             });
@@ -1722,7 +2105,7 @@
                 if(!payload.password) payload.password = '123456';
                 await window.supabaseClient.from('admins').insert([payload]);
             }
-            closeModal('admin-modal'); loadAdmins();
+            closeModal('admin-modal'); loadAdmins(); hideLoading();
         });
         window.deleteAdmin = async function(id) { if(confirm("Delete?")) { await window.supabaseClient.from('admins').delete().eq('id', id); loadAdmins(); } }
         window.toggleAdminStatus = async function(id, current) { 
@@ -1730,6 +2113,20 @@
             await window.supabaseClient.from('admins').update({ status: newStatus }).eq('id', id); loadAdmins(); 
         }
 
+        // UTILS
+        window.openModal = function(id) { 
+            document.getElementById(id).classList.remove('hidden'); 
+        }
+        
+        window.closeModal = function(id) { 
+            document.getElementById(id).classList.add('hidden'); 
+            const form = document.getElementById(id).querySelector('form');
+            if(form) {
+                form.reset();
+                const hiddenId = form.querySelector('input[type="hidden"]');
+                if(hiddenId) hiddenId.value = '';
+            }
+        }
     </script>
 </body>
 </html>
